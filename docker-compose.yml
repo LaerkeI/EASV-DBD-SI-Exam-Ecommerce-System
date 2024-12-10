@@ -1,16 +1,15 @@
 services:
 
   jenkins:
-    image: jenkins/jenkins:lts
+    build: .
+    user: root
     container_name: jenkins
     ports:
       - "8080:8080"
-      - "50000:50000" # For Jenkins agents
+      - "50000:50000"
     volumes:
-      - jenkins_home:/var/jenkins_home # Persistent Jenkins data
-      - /var/run/docker.sock:/var/run/docker.sock # Access Docker on the host
-    environment:
-      JAVA_OPTS: "-Djenkins.install.runSetupWizard=false"
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - ecommerce-network
 
@@ -67,4 +66,3 @@ networks:
 
 volumes:
   jenkins_home:
-    driver: local
