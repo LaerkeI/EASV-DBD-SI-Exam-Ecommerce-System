@@ -4,12 +4,15 @@ services:
     image: jenkins/jenkins:lts
     container_name: jenkins
     ports:
-      - "8080:8080" # Jenkins UI
-      - "50000:50000" # Agent communication
+    - "8080:8080"
+    - "50000:50000"
     volumes:
-      - jenkins_home:/var/jenkins_home # Persistent Jenkins data
+    - jenkins_home:/var/jenkins_home
     environment:
-      JAVA_OPTS: "-Djenkins.install.runSetupWizard=false" # Skip initial setup wizard (optional)
+      JAVA_OPTS: "-Djenkins.install.runSetupWizard=false"
+    user: root
+    command: >
+      bash -c "apt-get update && apt-get install -y git && exec /usr/local/bin/jenkins.sh"
     networks:
       - ecommerce-network
 
