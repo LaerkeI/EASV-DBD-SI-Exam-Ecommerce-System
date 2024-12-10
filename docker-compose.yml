@@ -1,0 +1,51 @@
+services:
+  rabbitmq:
+    image: "rabbitmq:3.12-management"
+    container_name: "rabbitmq"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - ecommerce-network
+
+  order-management-service:
+    build:
+      context: .
+      dockerfile: OrderManagementService/Dockerfile
+    container_name: "order-management-service"
+    ports:
+      - "8000:80"
+    depends_on:
+      - rabbitmq        # Ensures RabbitMQ starts first
+      - inventory-management-service
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: guest
+      RABBITMQ_PASS: guest
+    networks:
+      - ecommerce-network  
+
+  inventory-management-service:
+    build:
+      context: .
+      dockerfile: InventoryManagementService/Dockerfile
+    container_name: "inventory-management-service"
+    ports:
+      - "8001:80"
+    depends_on:
+      - rabbitmq        # Ensures RabbitMQ starts first
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: guest
+      RABBITMQ_PASS: guest
+    networks:
+      - ecommerce-network    
+
+networks:
+  ecommerce-network:
+    driver: bridge
