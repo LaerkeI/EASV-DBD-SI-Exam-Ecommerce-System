@@ -1,15 +1,15 @@
 services:
 
   jenkins:
-    build: .
-    user: root
+    image: jenkins/jenkins:lts
     container_name: jenkins
     ports:
-      - "8080:8080"
-      - "50000:50000"
+      - "8080:8080" # Jenkins UI
+      - "50000:50000" # Agent communication
     volumes:
-      - jenkins_home:/var/jenkins_home
-      - /var/run/docker.sock:/var/run/docker.sock
+      - jenkins_home:/var/jenkins_home # Persistent Jenkins data
+    environment:
+      JAVA_OPTS: "-Djenkins.install.runSetupWizard=false" # Skip initial setup wizard (optional)
     networks:
       - ecommerce-network
 
