@@ -1,4 +1,19 @@
 services:
+
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins
+    ports:
+      - "8080:8080"
+      - "50000:50000" # For Jenkins agents
+    volumes:
+      - jenkins_home:/var/jenkins_home # Persistent Jenkins data
+      - /var/run/docker.sock:/var/run/docker.sock # Access Docker on the host
+    environment:
+      JAVA_OPTS: "-Djenkins.install.runSetupWizard=false"
+    networks:
+      - ecommerce-network
+
   rabbitmq:
     image: "rabbitmq:3.12-management"
     container_name: "rabbitmq"
@@ -49,3 +64,7 @@ services:
 networks:
   ecommerce-network:
     driver: bridge
+
+volumes:
+  jenkins_home:
+    driver: local
