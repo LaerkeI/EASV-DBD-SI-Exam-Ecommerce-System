@@ -8,7 +8,7 @@ pipeline {
             steps {
                 script {
                     // Build the Docker images for all services
-                    sh 'docker compose -f docker-compose.yml build'
+                    sh 'docker-compose -f docker-compose.yml build'
                 }
             }
         }
