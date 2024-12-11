@@ -18,17 +18,17 @@ pipeline {
         stage('Build Docker Images') {
             steps {
                 script {
-                    // Build Docker images for both Order and Inventory services
-                    bat "docker-compose build" // Use bat for Windows compatibility
+                    // Build Docker images and tag them with the build number
+                    bat "docker-compose build --build-arg BUILD_NUMBER=${env.BUILD_NUMBER}"
                 }
             }
         }
         stage('Push to DockerHub') {
             steps {
                 script {
-                    // Log in to DockerHub and push the images
+                    // Use --password-stdin to securely pass the password to docker login
                     bat """
-                    docker login -u ${DOCKERHUB_CREDENTIALS_USR} -p ${DOCKERHUB_CREDENTIALS_PSW}
+                    echo ${DOCKERHUB_CREDENTIALS_PSW} | docker login -u ${DOCKERHUB_CREDENTIALS_USR} --password-stdin
                     docker push ${env.IMAGE_NAME_ORDER}:${env.BUILD_NUMBER}
                     docker push ${env.IMAGE_NAME_INVENTORY}:${env.BUILD_NUMBER}
                     """
