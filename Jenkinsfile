@@ -1,12 +1,12 @@
-pipeline{
+pipeline {
     agent any
     triggers {
         pollSCM("* * * * *")
     }
-    stages{
+    stages {
         stage("Build") {
             steps {
-                sh "docker compose build"
+                bat 'docker-compose build'
             }
         }
     }
