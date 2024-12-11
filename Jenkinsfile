@@ -12,7 +12,14 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                checkout scm // Checkout code from the repository
+                // Checkout using GitHub credentials
+                withCredentials([usernamePassword(credentialsId: 'GitHub', usernameVariable: 'GITHUB_USER', passwordVariable: 'GITHUB_TOKEN')]) {
+                    script {
+                        // Use GitHub token for authentication when cloning
+                        sh "git config --global credential.helper store"
+                        sh "git clone https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com/LaerkeI/EASV-DBD-SI-Ecommerce-System.git"
+                    }
+                }
             }
         }
         stage('Build Docker Images') {
