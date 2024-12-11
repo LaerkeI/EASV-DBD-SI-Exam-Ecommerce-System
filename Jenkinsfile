@@ -1,9 +1,6 @@
 pipeline {
     agent any // Run on any available agent
     environment {
-        DOCKERHUB_CREDENTIALS = credentials('DockerHub') // Credentials for DockerHub
-        GITHUB_CREDENTIALS = credentials('GitHub') // Credentials for GitHub
-        GITHUB_REPO = 'https://github.com/LaerkeI/EASV-DBD-SI-Ecommerce-System'
         IMAGE_NAME_ORDER = 'laerkeimeland/order-management-service'
         IMAGE_NAME_INVENTORY = 'laerkeimeland/inventory-management-service'
     }
