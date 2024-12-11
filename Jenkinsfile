@@ -11,6 +11,13 @@ pipeline {
         pollSCM("* * * * *") // Poll SCM for changes every minute
     }
     stages {
+        stage('Clean Workspace') {
+            steps {
+                script {
+                    deleteDir() // Cleans the workspace before cloning
+                }
+            }
+        }
         stage('Clone Repository') {
             steps {
                 // Checkout using GitHub credentials
