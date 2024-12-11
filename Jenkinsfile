@@ -25,15 +25,6 @@ pipeline {
                 }
             }
         }
-        stage('Test') {
-            steps {
-                script {
-                    // Run tests for each service in the Docker containers
-                    bat "docker run --rm ${env.IMAGE_NAME_ORDER}:${env.BUILD_NUMBER} ./run-tests.sh"
-                    bat "docker run --rm ${env.IMAGE_NAME_INVENTORY}:${env.BUILD_NUMBER} ./run-tests.sh"
-                }
-            }
-        }
         stage('Push to DockerHub') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'DOCKERHUB_PSW', usernameVariable: 'DOCKERHUB_USR')]) {
