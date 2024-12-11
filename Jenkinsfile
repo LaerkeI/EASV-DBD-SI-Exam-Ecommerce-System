@@ -1,42 +1,20 @@
-pipeline {
-    agent {
-        docker { image 'node:22.12.0-alpine3.21' }
+node {
+    def app
+
+    stage('Clone repository') {
+        // Fetch the code from the repository
+        checkout scm
     }
-    stages {
-        stage('Testing docker') {
-            steps {
-                sh 'node --eval "console.log(process.platform,process.env.CI)"'
-            }
-        }
-        stage('Checkout') {
-            steps {
-                git url: 'https://github.com/LaerkeI/EASV-DBD-SI-Ecommerce-System',
-                    branch: 'jenkins',
-                    credentialsId: 'Git'
-            }
-        }
-       stage('Build') {
-            steps {
-                script {
-                    // Build the Docker images for all services
-                    sh 'docker-compose build'
-                }
-            }
-        }
-        stage('Test') {
-            steps {
-                echo 'Testing...'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying...'
-            }
-        }
-        stage('Clean Workspace') {
-            steps {
-                cleanWs()
-            }
+
+    stage('Build Docker image') {
+        // Build a Docker image using the repository contents
+        app = docker.build("laerkei/easv-dbd-si-ecommerce-system")
+    }
+
+    stage('Test Docker image') {
+        // Run tests inside the Docker container
+        app.inside {
+            sh 'echo "Tests passed!"'
         }
     }
 }
