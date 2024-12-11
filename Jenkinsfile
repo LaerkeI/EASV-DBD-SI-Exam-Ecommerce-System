@@ -46,7 +46,8 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'DockerHub', usernameVariable: 'DOCKERHUB_USR', passwordVariable: 'DOCKERHUB_PSW')]) {
                     script {
                         bat """
-                        echo %DOCKERHUB_PSW% | docker login -u %DOCKERHUB_USR% --password-stdin
+                        docker login -u %DOCKERHUB_USR% --password-stdin < %DOCKERHUB_PSW%
+                        cd ${env.WORKSPACE} 
                         docker push ${env.IMAGE_NAME_ORDER}:${env.BUILD_NUMBER}
                         docker push ${env.IMAGE_NAME_INVENTORY}:${env.BUILD_NUMBER}
                         """
