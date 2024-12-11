@@ -1,19 +1,5 @@
 services:
 
-  jenkins:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: jenkins
-    ports:
-      - "8080:8080"
-      - "50000:50000"
-    volumes:
-      - jenkins_home:/var/jenkins_home
-      - /var/run/docker.sock:/var/run/docker.sock # To allow Jenkins to build and manage Docker containers, map the Docker socket into the Jenkins container. This provides Jenkins access to Docker commands.
-    networks:
-      - ecommerce-network
-
   rabbitmq:
     image: "rabbitmq:3.12-management"
     container_name: "rabbitmq"
