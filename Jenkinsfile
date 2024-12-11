@@ -37,6 +37,7 @@ pipeline {
                 script {
                     // Build Docker images and tag them with the build number
                     bat """
+                    cd EASV-DBD-SI-Ecommerce-System
                     docker-compose build --build-arg BUILD_NUMBER=${env.BUILD_NUMBER}
                     """
                 }
