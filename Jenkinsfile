@@ -8,9 +8,12 @@ pipeline {
                     credentialsId: 'Git'
             }
         }
-        stage('Build') {
+       stage('Build') {
             steps {
-                echo 'Building...'
+                script {
+                    // Build the Docker images for all services
+                    sh 'docker-compose -f docker-compose.yml build'
+                }
             }
         }
         stage('Test') {
