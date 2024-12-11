@@ -29,7 +29,6 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'DOCKERHUB_PSW', usernameVariable: 'DOCKERHUB_USR')]) {
                     script {
-                        // Use --password-stdin to securely pass the password to docker login
                         bat """
                         echo ${DOCKERHUB_PSW} | docker login -u ${DOCKERHUB_USR} --password-stdin
                         docker push ${env.IMAGE_NAME_ORDER}:${env.BUILD_NUMBER}
@@ -42,10 +41,11 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // Deploy using docker-compose with dynamic tags
+                    // Set the TAG environment variable in Windows batch syntax
                     bat """
-                    TAG=${BUILD_NUMBER} docker-compose down
-                    TAG=${BUILD_NUMBER} docker-compose up -d
+                    set TAG=${env.BUILD_NUMBER}
+                    docker-compose down
+                    docker-compose up -d
                     """
                 }
             }
