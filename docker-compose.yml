@@ -10,6 +10,7 @@ services:
       - "50000:50000"
     volumes:
       - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock # To allow Jenkins to build and manage Docker containers, map the Docker socket into the Jenkins container. This provides Jenkins access to Docker commands.
     networks:
       - ecommerce-network
 
@@ -26,6 +27,7 @@ services:
       - ecommerce-network
 
   order-management-service:
+    image: laerkeimeland/order-management-service:${TAG:-latest} # For dynamic tagging
     build:
       context: .
       dockerfile: OrderManagementService/Dockerfile
@@ -33,7 +35,7 @@ services:
     ports:
       - "8000:80"
     depends_on:
-      - rabbitmq        # Ensures RabbitMQ starts first
+      - rabbitmq
       - inventory-management-service
     environment:
       RABBITMQ_HOST: rabbitmq
@@ -41,9 +43,10 @@ services:
       RABBITMQ_USER: guest
       RABBITMQ_PASS: guest
     networks:
-      - ecommerce-network  
+      - ecommerce-network
 
   inventory-management-service:
+    image: laerkeimeland/inventory-management-service:${TAG:-latest} # For dynamic tagging
     build:
       context: .
       dockerfile: InventoryManagementService/Dockerfile
@@ -51,14 +54,15 @@ services:
     ports:
       - "8001:80"
     depends_on:
-      - rabbitmq        # Ensures RabbitMQ starts first
+      - rabbitmq
     environment:
       RABBITMQ_HOST: rabbitmq
       RABBITMQ_PORT: 5672
       RABBITMQ_USER: guest
       RABBITMQ_PASS: guest
     networks:
-      - ecommerce-network    
+    - ecommerce-network
+    
 
 networks:
   ecommerce-network:
