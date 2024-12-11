@@ -8,11 +8,9 @@ namespace InventoryManagementService
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            var consumer = new OrderEventConsumer();
-            consumer.StartConsuming();
-
             // Add services to the container.
             builder.Services.AddSingleton<OrderEventConsumer>();
+            builder.Services.AddHostedService<OrderEventConsumer>();
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
