@@ -2,6 +2,7 @@ pipeline {
     agent any // Run on any available agent
     environment {
         DOCKERHUB_CREDENTIALS = credentials('DockerHub') // Credentials for DockerHub
+        GITHUB_CREDENTIALS = credentials('GitHub') // Credentials for GitHub
         GITHUB_REPO = 'https://github.com/LaerkeI/EASV-DBD-SI-Ecommerce-System'
         IMAGE_NAME_ORDER = 'laerkeimeland/order-management-service'
         IMAGE_NAME_INVENTORY = 'laerkeimeland/inventory-management-service'
@@ -16,8 +17,10 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'GitHub', usernameVariable: 'GITHUB_USER', passwordVariable: 'GITHUB_TOKEN')]) {
                     script {
                         // Use GitHub token for authentication when cloning
-                        sh "git config --global credential.helper store"
-                        sh "git clone https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com/LaerkeI/EASV-DBD-SI-Ecommerce-System.git"
+                        bat """
+                        git config --global credential.helper store
+                        git clone https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com/LaerkeI/EASV-DBD-SI-Ecommerce-System.git
+                        """
                     }
                 }
             }
