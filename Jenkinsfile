@@ -20,10 +20,8 @@ pipeline {
         }
         stage('Clone Repository') {
             steps {
-                // Checkout using GitHub credentials
                 withCredentials([usernamePassword(credentialsId: 'GitHub', usernameVariable: 'GITHUB_USER', passwordVariable: 'GITHUB_TOKEN')]) {
                     script {
-                        // Configure git to use stored credentials and clone using GitHub token
                         bat """
                         git config --global credential.helper wincred
                         git clone https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com/LaerkeI/EASV-DBD-SI-Ecommerce-System.git
@@ -45,10 +43,10 @@ pipeline {
         }
         stage('Push to DockerHub') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'DockerHub', usernameVariable: 'DOCKERHUB_USER', passwordVariable: 'DOCKERHUB_TOKEN')]) {
+                withCredentials([usernamePassword(credentialsId: 'DockerHub', usernameVariable: 'DOCKERHUB_USR', passwordVariable: 'DOCKERHUB_PSW')]) {
                     script {
                         bat """
-                        echo %DOCKERHUB_TOKEN% | docker login -u %DOCKERHUB_USER% --password-stdin
+                        echo %DOCKERHUB_PSW% | docker login -u %DOCKERHUB_USR% --password-stdin
                         docker push ${env.IMAGE_NAME_ORDER}:${env.BUILD_NUMBER}
                         docker push ${env.IMAGE_NAME_INVENTORY}:${env.BUILD_NUMBER}
                         """
@@ -59,7 +57,6 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // Set the TAG environment variable in Windows batch syntax
                     bat """
                     set TAG=${env.BUILD_NUMBER}
                     docker-compose down
