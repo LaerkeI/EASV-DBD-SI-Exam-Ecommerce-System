@@ -72,12 +72,4 @@ pipeline {
                                [pattern: '.propsfile', type: 'EXCLUDE']])
         }
     }
-    post {
-        success {
-            echo 'Pipeline succeeded!' // Output message if pipeline is successful
-        }
-        failure {
-            echo 'Pipeline failed.' // Output message if pipeline fails
-        }
-    }
 }
