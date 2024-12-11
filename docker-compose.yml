@@ -13,10 +13,12 @@ services:
       - ecommerce-network
 
   order-management-service:
-    image: laerkeimeland/order-management-service:${TAG:-latest} # For dynamic tagging
     build:
       context: .
       dockerfile: OrderManagementService/Dockerfile
+      args:
+        BUILD_NUMBER: ${BUILD_NUMBER}
+    image: laerkeimeland/order-management-service:${BUILD_NUMBER}
     container_name: "order-management-service"
     ports:
       - "8000:80"
@@ -32,10 +34,12 @@ services:
       - ecommerce-network
 
   inventory-management-service:
-    image: laerkeimeland/inventory-management-service:${TAG:-latest} # For dynamic tagging
     build:
       context: .
       dockerfile: InventoryManagementService/Dockerfile
+      args:
+        BUILD_NUMBER: ${BUILD_NUMBER}
+    image: laerkeimeland/inventory-management-service:${BUILD_NUMBER}
     container_name: "inventory-management-service"
     ports:
       - "8001:80"
@@ -53,6 +57,3 @@ services:
 networks:
   ecommerce-network:
     driver: bridge
-
-volumes:
-  jenkins_home:
