@@ -16,9 +16,11 @@ pipeline {
                 // Checkout using GitHub credentials
                 withCredentials([usernamePassword(credentialsId: 'GitHub', usernameVariable: 'GITHUB_USER', passwordVariable: 'GITHUB_TOKEN')]) {
                     script {
-                        // Configure git to use stored credentials and clone using GitHub token
                         bat """
                         git config --global credential.helper wincred
+                        IF EXIST EASV-DBD-SI-Ecommerce-System (
+                            RMDIR /S /Q EASV-DBD-SI-Ecommerce-System
+                        )
                         git clone https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com/LaerkeI/EASV-DBD-SI-Ecommerce-System.git
                         """
                     }
