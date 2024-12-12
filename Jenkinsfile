@@ -4,9 +4,6 @@ pipeline {
         IMAGE_NAME_ORDER = 'laerkeimeland/order-management-service'
         IMAGE_NAME_INVENTORY = 'laerkeimeland/inventory-management-service'
     }
-    triggers {
-        pollSCM("* * * * *") // Poll SCM for changes every minute
-    }
     stages {
         stage('Clone Repository') {
             steps {
