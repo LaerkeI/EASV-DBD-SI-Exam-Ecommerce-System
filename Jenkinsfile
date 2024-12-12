@@ -33,10 +33,10 @@ pipeline {
         }
         stage('Push to DockerHub') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'DOCKERHUB_PSW', usernameVariable: 'DOCKERHUB_USR')]) {
+                withCredentials([usernamePassword(credentialsId: 'DockerHub', usernameVariable: 'DOCKERHUB_USR', passwordVariable: 'DOCKERHUB_PSW')]) {
                     script {
                         bat """
-                        echo ${DOCKERHUB_PSW} | docker login -u ${DOCKERHUB_USR} --password-stdin
+                        docker login -u $DOCKERHUB_USR -p ${DOCKERHUB_PSW}
                         docker push ${env.IMAGE_NAME_ORDER}:${env.BUILD_NUMBER}
                         docker push ${env.IMAGE_NAME_INVENTORY}:${env.BUILD_NUMBER}
                         """
