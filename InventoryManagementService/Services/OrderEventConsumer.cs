@@ -7,12 +7,12 @@ using System.Text;
 
 namespace InventoryManagementService.Services
 {
-    public class OrderEventConsumer
+    public class OrderEventConsumer : BackgroundService
     {
         private readonly string _hostName = "rabbitmq"; // RabbitMQ server host. Service name from docker-compose.yml
         private readonly string _queueName = "orderQueue"; // Queue name
 
-        public void StartConsuming()
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             var factory = new ConnectionFactory()
             {
@@ -59,8 +59,11 @@ namespace InventoryManagementService.Services
                                  autoAck: true,
                                  consumer: consumer);
 
-            Console.WriteLine("Consumer started. Press [enter] to exit.");
-            Console.ReadLine();
+            while(!stoppingToken.IsCancellationRequested)
+            {
+                await Task.Delay(1000, stoppingToken);
+            }
+            Console.WriteLine("Message handler is stopping..");
         }
 
         private T RetryUntilSuccess<T>(Func<T> action)
