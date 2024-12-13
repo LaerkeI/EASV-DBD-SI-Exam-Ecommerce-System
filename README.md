@@ -7,4 +7,4 @@ Man bør i stedet bruge en background service,
 så man er garanteret at den kører i sin egen thread.
 
 ### Jenkins
-testing if pipeline runs when push to master
+testing if pipeline runs when push to master again
