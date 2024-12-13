@@ -26,11 +26,9 @@ pipeline {
                 script {
                     // Build Docker images and tag them with both the build number and 'latest'
                     bat """
-                    docker build -t ${env.IMAGE_NAME_ORDER}:${env.BUILD_NUMBER} ./order-management-service
-                    docker tag ${env.IMAGE_NAME_ORDER}:${env.BUILD_NUMBER} ${env.IMAGE_NAME_ORDER}:latest
-                    
-                    docker build -t ${env.IMAGE_NAME_INVENTORY}:${env.BUILD_NUMBER} ./inventory-management-service
-                    docker tag ${env.IMAGE_NAME_INVENTORY}:${env.BUILD_NUMBER} ${env.IMAGE_NAME_INVENTORY}:latest
+                    docker-compose build --build-arg BUILD_NUMBER=${BUILD_NUMBER}
+                    docker tag ${IMAGE_NAME_ORDER}:${BUILD_NUMBER} ${IMAGE_NAME_ORDER}:latest
+                    docker tag ${IMAGE_NAME_INVENTORY}:${BUILD_NUMBER} ${IMAGE_NAME_INVENTORY}:latest
                     """
                 }
             }
