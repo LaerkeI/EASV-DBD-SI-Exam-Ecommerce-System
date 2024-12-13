@@ -47,3 +47,35 @@ for messages without being unintentionally terminated or interrupted by other pa
 
 - Important: If the ngrok account is on `Plan: Free`, a new random public URL is generated each time the ngrok http command is run.
   If the tunnel is closed or restarted, update the Payload URL in the GitHub webhook to the new public URL for the webhook to continue functioning.
+
+### Kubernetes
+
+Pods for a single container. You don't need to create pods directly and should instead use Deployment. 
+Services for load balancing
+Replica Sets for spinning up more instances of the same container (pod?)
+
+**Setup: Kubernetes Dashboard**
+
+First apply the following YAML file to create the Kubernetes Dashboard:
+
+`kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml`
+
+Create service account and grant privileges:
+
+`kubectl create sa webadmin -n kubernetes-dashboard` 
+
+`kubectl create clusterrolebinding webadmin --clusterrole=cluster-admin --serviceaccount=kubernetes-dashboard:webadmin`
+
+Get the token for the service account:
+
+`kubectl create token webadmin -n kubernetes-dashboard`
+
+Run the following command:
+
+`kubectl proxy`
+
+Open the following URL in your browser:
+
+http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
+
+Use the token to login.

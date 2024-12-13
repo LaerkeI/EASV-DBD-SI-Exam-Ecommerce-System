@@ -42,7 +42,7 @@ services:
     image: laerkeimeland/inventory-management-service:${BUILD_NUMBER}
     container_name: "inventory-management-service"
     ports:
-      - "8001:80"
+      - "8002:80"
     depends_on:
       - rabbitmq
     environment:
