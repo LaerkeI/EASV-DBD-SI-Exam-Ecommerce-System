@@ -2,6 +2,7 @@
 
 ### RabbitMQ Messaging
 Problemet med at OrderEventConsumer i InventoryManagementService ikke modtog beskeder fra OrderService:  
-Consumer dør og lytter ikke på beskeder. 
-Man bør i stedet bruge en background service, 
-så man er garanteret at den kører i sin egen thread.
+Consumer dÃ¸r og lytter ikke pÃ¥ beskeder. 
+Man bÃ¸r i stedet bruge en background service, 
+sÃ¥ man er garanteret at den kÃ¸rer i sin egen thread.
+

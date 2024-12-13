@@ -1,4 +1,5 @@
 services:
+
   rabbitmq:
     image: "rabbitmq:3.12-management"
     container_name: "rabbitmq"
@@ -15,11 +16,14 @@ services:
     build:
       context: .
       dockerfile: OrderManagementService/Dockerfile
+      args:
+        BUILD_NUMBER: ${BUILD_NUMBER}
+    image: laerkeimeland/order-management-service:${BUILD_NUMBER}
     container_name: "order-management-service"
     ports:
       - "8000:80"
     depends_on:
-      - rabbitmq        # Ensures RabbitMQ starts first
+      - rabbitmq
       - inventory-management-service
     environment:
       RABBITMQ_HOST: rabbitmq
@@ -27,24 +31,28 @@ services:
       RABBITMQ_USER: guest
       RABBITMQ_PASS: guest
     networks:
-      - ecommerce-network  
+      - ecommerce-network
 
   inventory-management-service:
     build:
       context: .
       dockerfile: InventoryManagementService/Dockerfile
+      args:
+        BUILD_NUMBER: ${BUILD_NUMBER}
+    image: laerkeimeland/inventory-management-service:${BUILD_NUMBER}
     container_name: "inventory-management-service"
     ports:
       - "8001:80"
     depends_on:
-      - rabbitmq        # Ensures RabbitMQ starts first
+      - rabbitmq
     environment:
       RABBITMQ_HOST: rabbitmq
       RABBITMQ_PORT: 5672
       RABBITMQ_USER: guest
       RABBITMQ_PASS: guest
     networks:
-      - ecommerce-network    
+    - ecommerce-network
+    
 
 networks:
   ecommerce-network:
