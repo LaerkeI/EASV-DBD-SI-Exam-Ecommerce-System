@@ -24,9 +24,13 @@ pipeline {
         stage('Build Docker Images') {
             steps {
                 script {
-                    // Build Docker images and tag them with the build number
+                    // Build Docker images and tag them with both the build number and 'latest'
                     bat """
-                    docker-compose build --build-arg BUILD_NUMBER=${env.BUILD_NUMBER}
+                    docker build -t ${env.IMAGE_NAME_ORDER}:${env.BUILD_NUMBER} ./order-management-service
+                    docker tag ${env.IMAGE_NAME_ORDER}:${env.BUILD_NUMBER} ${env.IMAGE_NAME_ORDER}:latest
+                    
+                    docker build -t ${env.IMAGE_NAME_INVENTORY}:${env.BUILD_NUMBER} ./inventory-management-service
+                    docker tag ${env.IMAGE_NAME_INVENTORY}:${env.BUILD_NUMBER} ${env.IMAGE_NAME_INVENTORY}:latest
                     """
                 }
             }
@@ -35,10 +39,15 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'DockerHub', usernameVariable: 'DOCKERHUB_USR', passwordVariable: 'DOCKERHUB_PSW')]) {
                     script {
+                        // Push both the versioned and 'latest' tags to DockerHub
                         bat """
-                        docker login -u $DOCKERHUB_USR -p ${DOCKERHUB_PSW}
+                        docker login -u ${DOCKERHUB_USR} -p ${DOCKERHUB_PSW}
+                        
                         docker push ${env.IMAGE_NAME_ORDER}:${env.BUILD_NUMBER}
+                        docker push ${env.IMAGE_NAME_ORDER}:latest
+                        
                         docker push ${env.IMAGE_NAME_INVENTORY}:${env.BUILD_NUMBER}
+                        docker push ${env.IMAGE_NAME_INVENTORY}:latest
                         """
                     }
                 }
