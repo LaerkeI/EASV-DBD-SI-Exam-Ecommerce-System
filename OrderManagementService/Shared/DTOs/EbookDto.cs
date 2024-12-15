@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shared.Models
+namespace Shared.DTOs
 {
-    public class Ebook
+    public class EbookDto
     {
         public string ISBN { get; set; }
     }
