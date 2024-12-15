@@ -11,6 +11,7 @@ namespace OrderManagementService.Mappers
         {
             // Map between Order and its DTOs
             CreateMap<Order, OrderDto>().ReverseMap();
+            CreateMap<OrderLine, OrderLineDto>().ReverseMap();
 
             // Map Order to OrderEvent for messaging
             CreateMap<Order, OrderEvent>();

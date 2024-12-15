@@ -23,13 +23,19 @@ namespace OrderManagementService.Services
 
         public async Task<IEnumerable<OrderDto>> GetOrdersAsync()
         {
-            var orders = await _context.Orders.ToListAsync();
+            var orders = await _context.Orders
+                .Include(o => o.OrderLines) // Include related OrderLines
+                .ToListAsync();
+
             return _mapper.Map<IEnumerable<OrderDto>>(orders);
         }
 
         public async Task<OrderDto> GetOrderAsync(int id)
         {
-            var order = await _context.Orders.FindAsync(id);
+            var order = await _context.Orders
+                .Include(o => o.OrderLines) // Include related OrderLines
+                .FirstOrDefaultAsync(o => o.Id == id);
+
             return _mapper.Map<OrderDto>(order);
         }
 
@@ -52,10 +58,22 @@ namespace OrderManagementService.Services
 
         public async Task UpdateOrderAsync(OrderDto orderDto)
         {
-            var order = _mapper.Map<Order>(orderDto);
-            _context.Entry(order).State = EntityState.Modified;
+            // Find the existing order by its ID
+            var existingOrder = await _context.Orders
+                .Include(o => o.OrderLines)
+                .FirstOrDefaultAsync(o => o.Id == orderDto.Id);
+
+            if (existingOrder == null)
+            {
+                throw new KeyNotFoundException("Order not found");
+            }
+
+            // Map the updated properties to the existing entity
+            _mapper.Map(orderDto, existingOrder); 
+
             await _context.SaveChangesAsync();
         }
+
 
         public async Task DeleteOrderAsync(int id)
         {
