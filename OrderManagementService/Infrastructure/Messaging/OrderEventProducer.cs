@@ -1,9 +1,9 @@
 ﻿using Newtonsoft.Json;
+using OrderManagementService.Infrastructure.Messaging.Contracts;
 using RabbitMQ.Client;
-using Shared.Contracts;
 using System.Text;
 
-namespace OrderManagementService.Messaging
+namespace OrderManagementService.Infrastructure.Messaging
 {
     public class OrderEventProducer
     {
@@ -46,6 +46,6 @@ namespace OrderManagementService.Messaging
                                     body: body);
 
             await Task.CompletedTask;
-        }  
+        }
     }
 }

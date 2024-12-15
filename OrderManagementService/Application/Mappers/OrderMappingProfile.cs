@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using OrderManagementService.Entities;
-using Shared.Contracts;
-using Shared.DTOs;
+using OrderManagementService.Application.DTOs;
+using OrderManagementService.Domain.Entities;
+using OrderManagementService.Infrastructure.Messaging.Contracts;
 
-namespace OrderManagementService.Mappers
+namespace OrderManagementService.Application.Mappers
 {
     public class OrderMappingProfile : Profile
     {

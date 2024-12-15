@@ -1,4 +1,4 @@
-﻿namespace Shared.Contracts
+﻿namespace OrderManagementService.Infrastructure.Messaging.Contracts
 {
     public class OrderEvent
     {

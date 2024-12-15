@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using OrderManagementService.Data;
-using OrderManagementService.Mappers;
-using OrderManagementService.Messaging;
-using OrderManagementService.Services;
+using OrderManagementService.Application.Interfaces;
+using OrderManagementService.Application.Services;
+using OrderManagementService.Application.Mappers;
+using OrderManagementService.Infrastructure.Data;
+using OrderManagementService.Infrastructure.Messaging;
 
 namespace OrderManagementService
 {

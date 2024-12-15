@@ -1,4 +1,4 @@
-﻿namespace Shared.DTOs
+﻿namespace OrderManagementService.Application.DTOs
 {
     public class OrderDto
     {

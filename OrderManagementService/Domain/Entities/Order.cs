@@ -1,6 +1,4 @@
-﻿using Shared.DTOs;
-
-namespace OrderManagementService.Entities
+﻿namespace OrderManagementService.Domain.Entities
 {
     public class Order
     {

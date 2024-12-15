@@ -1,4 +1,4 @@
-﻿namespace OrderManagementService.Entities
+﻿namespace OrderManagementService.Domain.Entities
 {
     public class OrderLine
     {

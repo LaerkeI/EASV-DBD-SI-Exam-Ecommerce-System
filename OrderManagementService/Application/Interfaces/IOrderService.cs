@@ -1,6 +1,6 @@
-﻿using Shared.DTOs;
+﻿using OrderManagementService.Application.DTOs;
 
-namespace OrderManagementService.Services
+namespace OrderManagementService.Application.Interfaces
 {
     public interface IOrderService
     {

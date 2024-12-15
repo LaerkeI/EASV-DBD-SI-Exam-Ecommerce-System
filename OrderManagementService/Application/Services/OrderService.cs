@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using OrderManagementService.Data;
-using OrderManagementService.Messaging;
-using OrderManagementService.Entities;
-using Shared.Contracts;
-using Shared.DTOs;
+using OrderManagementService.Infrastructure.Messaging;
+using OrderManagementService.Domain.Entities;
+using OrderManagementService.Infrastructure.Data;
+using OrderManagementService.Infrastructure.Messaging.Contracts;
+using OrderManagementService.Application.Interfaces;
+using OrderManagementService.Application.DTOs;
 
-namespace OrderManagementService.Services
+namespace OrderManagementService.Application.Services
 {
     public class OrderService : IOrderService
     {
@@ -64,7 +65,7 @@ namespace OrderManagementService.Services
                 .FirstOrDefaultAsync(o => o.Id == orderDto.Id);
 
             // Map the updated properties to the existing entity
-            _mapper.Map(orderDto, existingOrder); 
+            _mapper.Map(orderDto, existingOrder);
 
             await _context.SaveChangesAsync();
         }
