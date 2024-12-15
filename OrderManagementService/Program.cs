@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using OrderManagementService.Application.Interfaces;
 using OrderManagementService.Application.Services;
-using OrderManagementService.Application.Mappers;
 using OrderManagementService.Infrastructure.Data;
 using OrderManagementService.Infrastructure.Messaging;
+using OrderManagementService.Infrastructure.Repositories;
 
 namespace OrderManagementService
 {
@@ -20,6 +20,7 @@ namespace OrderManagementService
             // Register AutoMapper and your mapping profiles
             builder.Services.AddAutoMapper(typeof(Program));
             
+            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddSingleton<OrderEventProducer>();
             builder.Services.AddControllers();
