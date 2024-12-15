@@ -7,6 +7,7 @@
 
 ## Exam Notes
 
+
 ### RabbitMQ Messaging
 The issue with `OrderEventConsumer` in `InventoryManagementService` not receiving messages from `OrderService` 
 was because the consumer died (the consumer process stopped running) and no longer listened for incoming messages.
@@ -14,6 +15,11 @@ was because the consumer died (the consumer process stopped running) and no long
 To solve this issue, the consumer should be implemented as a background service. Using a background service ensures 
 that the consumer operates in its own dedicated thread and guarantees that the service continuously runs and listens 
 for messages without being unintentionally terminated or interrupted by other parts of the application.
+
+#### Messaging in the Service layer (Separation of Concerns)
+The controller should handle HTTP requests and responses, delegating the core business logic to the service layer.
+Messaging is part of the business logic and is closely tied to the domain (e.g., publishing events about order creation or updates). This logic belongs in the service layer.
+
 
 ### Jenkins
 - For this system, *Jenkins UI* is accessible at the default URL: `http://localhost:8080`.
@@ -35,6 +41,7 @@ for messages without being unintentionally terminated or interrupted by other pa
 - Install the "Locale" plugin in Jenkins to force the Jenkins UI to display in English. Without this, the interface may display 
   a mix of English and poorly translated Danish.
 
+
 ### ngrok
 
 *ngrok* is used as a reverse proxy to configure the GitHub webhook for *Jenkins* running on localhost.
@@ -52,6 +59,7 @@ for messages without being unintentionally terminated or interrupted by other pa
 
 - Important: If the ngrok account is on `Plan: Free`, a new random public URL is generated each time the ngrok http command is run.
   If the tunnel is closed or restarted, update the Payload URL in the GitHub webhook to the new public URL for the webhook to continue functioning.
+
 
 ### Kubernetes
 
