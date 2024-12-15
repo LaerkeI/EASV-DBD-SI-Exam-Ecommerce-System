@@ -63,11 +63,6 @@ namespace OrderManagementService.Services
                 .Include(o => o.OrderLines)
                 .FirstOrDefaultAsync(o => o.Id == orderDto.Id);
 
-            if (existingOrder == null)
-            {
-                throw new KeyNotFoundException("Order not found");
-            }
-
             // Map the updated properties to the existing entity
             _mapper.Map(orderDto, existingOrder); 
 
