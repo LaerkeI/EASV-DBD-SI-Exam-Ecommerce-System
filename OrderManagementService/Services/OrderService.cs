@@ -1,62 +1,66 @@
-﻿using Newtonsoft.Json;
-using RabbitMQ.Client;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using OrderManagementService.Data;
+using OrderManagementService.Messaging;
+using OrderManagementService.Entities;
 using Shared.Contracts;
-using System;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace OrderManagementService.Services
 {
     public class OrderService : IOrderService
     {
-        private readonly string _hostName = "rabbitmq";  // RabbitMQ server host. Service name from docker-compose.yml
-        private readonly string _queueName = "orderQueue"; // Queue name for order events
+        private readonly IMapper _mapper;
+        private readonly OrderContext _context;
+        private readonly OrderEventProducer _orderEventProducer;
 
-        public OrderService()
+        public OrderService(IMapper _mapper, OrderContext context, OrderEventProducer orderEventProducer)
         {
-            // No dependency injection for RabbitMQ client in this example
+            _context = context;
+            _orderEventProducer = orderEventProducer;
         }
 
-        public async Task CreateOrderAsync(OrderEvent orderEvent)
+        public async Task<IEnumerable<Order>> GetOrdersAsync()
         {
-            // Business logic for creating an order
-            Console.WriteLine("Order created: " + orderEvent.Id);
-
-            // Publish the order event to RabbitMQ
-            await PublishOrderEventAsync(orderEvent);
-            Console.WriteLine("Order event published.");
+            return await _context.Orders.ToListAsync();
         }
 
-        private async Task PublishOrderEventAsync(OrderEvent orderEvent)
+        public async Task<Order> GetOrderAsync(int id)
         {
-            var factory = new ConnectionFactory()
+            return await _context.Orders.FindAsync(id);
+        }
+
+        public async Task<Order> CreateOrderAsync(Order order)
+        {
+            _context.Orders.Add(order);
+            await _context.SaveChangesAsync();
+
+            var orderEvent = new OrderEvent
             {
-                HostName = _hostName, 
-                Port = 5672,            // Ensure this matches your RabbitMQ's AMQP port
-                UserName = "guest",     // Replace if using non-default credentials
-                Password = "guest"      // Replace if using non-default credentials
+                Id = order.Id,
+                BookISBN = order.BookISBN
             };
-            using var connection = factory.CreateConnection();
-            using var channel = connection.CreateModel();
 
-            // Ensure the queue exists (if not, it will be created)
-            channel.QueueDeclare(queue: _queueName,
-                                 durable: false,
-                                 exclusive: false,
-                                 autoDelete: false,
-                                 arguments: null);
+            // Publish the OrderEvent to the message queue
+            await _orderEventProducer.PublishOrderEventAsync(orderEvent);
 
-            // Serialize the OrderEvent to JSON
-            var message = JsonConvert.SerializeObject(orderEvent);
-            var body = Encoding.UTF8.GetBytes(message);
+            return order;
+        }
 
-            // Publish the message to the queue
-            channel.BasicPublish(exchange: "",
-                                 routingKey: _queueName,
-                                 basicProperties: null,
-                                 body: body);
+        public async Task UpdateOrderAsync(Order order)
+        {
+            _context.Entry(order).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+        }
 
-            await Task.CompletedTask;
+        public async Task DeleteOrderAsync(int id)
+        {
+            var order = await _context.Orders.FindAsync(id);
+            if (order != null)
+            {
+                _context.Orders.Remove(order);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

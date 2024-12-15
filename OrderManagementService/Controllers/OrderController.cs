@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using OrderManagementService.Entities;
 using OrderManagementService.Services;
 using Shared.Contracts;
 
@@ -17,7 +18,7 @@ namespace OrderManagementService.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateOrder([FromBody] OrderEvent order)
+        public async Task<IActionResult> CreateOrder([FromBody] Order order)
         {
             await _orderService.CreateOrderAsync(order);
             return Ok();

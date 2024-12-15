@@ -1,6 +1,6 @@
-﻿namespace Shared.Contracts
+﻿namespace OrderManagementService.Entities
 {
-    public class OrderEvent
+    public class Order
     {
         public int Id { get; set; }
         public string BookISBN { get; set; }
