@@ -4,6 +4,8 @@
 `An exception has been raised that is likely due to a transient failure. Consider enabling transient error resiliency by adding 'EnableRetryOnFailure' to the 'UseSqlServer' call`
 = The database is not up yet. Give it a moment and try again. That usually solves the problem. 
 
+`A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: TCP Provider, error: 0 - No such host is known.)`
+= The server name in the connection string in appsettings.json needs to be `localhost, <port-mapped-to-on-host>` and not `<service-name>, <port-mapped-to-on-host>`
 
 ## Exam Notes
 
