@@ -17,7 +17,7 @@ namespace OrderManagementService
                 options.UseSqlServer(builder.Configuration.GetConnectionString("MSSQLConnection")));
             
             // Register AutoMapper and your mapping profiles
-            // builder.Services.AddAutoMapper(typeof(OrderMappingProfile));
+            builder.Services.AddAutoMapper(typeof(Program));
             
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddSingleton<OrderEventProducer>();

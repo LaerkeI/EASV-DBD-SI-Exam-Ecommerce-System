@@ -23,6 +23,7 @@ services:
     ports:
       - "8000:80"
     depends_on:
+      - order-mssql-server
       - rabbitmq
       - inventory-management-service
     environment:
@@ -44,6 +45,7 @@ services:
     ports:
       - "8002:80"
     depends_on:
+      - inventory-mssql-server
       - rabbitmq
     environment:
       RABBITMQ_HOST: rabbitmq

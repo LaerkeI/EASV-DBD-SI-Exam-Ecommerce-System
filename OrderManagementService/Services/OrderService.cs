@@ -14,8 +14,9 @@ namespace OrderManagementService.Services
         private readonly OrderContext _context;
         private readonly OrderEventProducer _orderEventProducer;
 
-        public OrderService(IMapper _mapper, OrderContext context, OrderEventProducer orderEventProducer)
+        public OrderService(IMapper mapper, OrderContext context, OrderEventProducer orderEventProducer)
         {
+            _mapper = mapper;
             _context = context;
             _orderEventProducer = orderEventProducer;
         }
@@ -35,11 +36,7 @@ namespace OrderManagementService.Services
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
 
-            var orderEvent = new OrderEvent
-            {
-                Id = order.Id,
-                BookISBN = order.BookISBN
-            };
+            var orderEvent = _mapper.Map<OrderEvent>(order);
 
             // Publish the OrderEvent to the message queue
             await _orderEventProducer.PublishOrderEventAsync(orderEvent);
