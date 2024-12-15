@@ -4,7 +4,7 @@ using OrderManagementService.Data;
 using OrderManagementService.Messaging;
 using OrderManagementService.Entities;
 using Shared.Contracts;
-
+using Shared.DTOs;
 
 namespace OrderManagementService.Services
 {
@@ -21,31 +21,38 @@ namespace OrderManagementService.Services
             _orderEventProducer = orderEventProducer;
         }
 
-        public async Task<IEnumerable<Order>> GetOrdersAsync()
+        public async Task<IEnumerable<OrderDto>> GetOrdersAsync()
         {
-            return await _context.Orders.ToListAsync();
+            var orders = await _context.Orders.ToListAsync();
+            return _mapper.Map<IEnumerable<OrderDto>>(orders);
         }
 
-        public async Task<Order> GetOrderAsync(int id)
+        public async Task<OrderDto> GetOrderAsync(int id)
         {
-            return await _context.Orders.FindAsync(id);
+            var order = await _context.Orders.FindAsync(id);
+            return _mapper.Map<OrderDto>(order);
         }
 
-        public async Task<Order> CreateOrderAsync(Order order)
+        public async Task<OrderDto> CreateOrderAsync(OrderDto orderDto)
         {
+            // Map the DTO to the Order entity
+            var order = _mapper.Map<Order>(orderDto);
+
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
 
+            // Map the Order entity to OrderEvent for messaging
             var orderEvent = _mapper.Map<OrderEvent>(order);
 
-            // Publish the OrderEvent to the message queue
             await _orderEventProducer.PublishOrderEventAsync(orderEvent);
 
-            return order;
+            // Map the saved Order entity back to OrderDto
+            return _mapper.Map<OrderDto>(order);
         }
 
-        public async Task UpdateOrderAsync(Order order)
+        public async Task UpdateOrderAsync(OrderDto orderDto)
         {
+            var order = _mapper.Map<Order>(orderDto);
             _context.Entry(order).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }

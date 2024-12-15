@@ -1,14 +1,13 @@
-﻿using OrderManagementService.Entities;
-using Shared.Contracts;
+﻿using Shared.DTOs;
 
 namespace OrderManagementService.Services
 {
     public interface IOrderService
     {
-        Task<IEnumerable<Order>> GetOrdersAsync();
-        Task<Order> GetOrderAsync(int id);
-        Task<Order> CreateOrderAsync(Order order);
-        Task UpdateOrderAsync(Order order);
+        Task<IEnumerable<OrderDto>> GetOrdersAsync();
+        Task<OrderDto> GetOrderAsync(int id);
+        Task<OrderDto> CreateOrderAsync(OrderDto orderDto);
+        Task UpdateOrderAsync(OrderDto orderDto);
         Task DeleteOrderAsync(int id);
     }
 }

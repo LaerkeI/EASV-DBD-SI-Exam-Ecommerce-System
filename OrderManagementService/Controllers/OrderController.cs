@@ -1,13 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using OrderManagementService.Entities;
+﻿using Microsoft.AspNetCore.Mvc;
 using OrderManagementService.Services;
-using Shared.Contracts;
+using Shared.DTOs;
 
 namespace OrderManagementService.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class OrderController : ControllerBase
     {
         private readonly IOrderService _orderService;
@@ -17,11 +15,58 @@ namespace OrderManagementService.Controllers
             _orderService = orderService;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateOrder([FromBody] Order order)
+        // GET: api/Order
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<OrderDto>>> GetOrders()
         {
-            await _orderService.CreateOrderAsync(order);
-            return Ok();
+            var orders = await _orderService.GetOrdersAsync();
+            return Ok(orders);
+        }
+
+        // GET: api/Order/{id}
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<OrderDto>> GetOrder(int id)
+        {
+            var order = await _orderService.GetOrderAsync(id);
+            if (order == null)
+                return NotFound();
+
+            return Ok(order);
+        }
+
+        // POST: api/Order
+        [HttpPost]
+        public async Task<ActionResult<OrderDto>> CreateOrder([FromBody] OrderDto orderDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var createdOrder = await _orderService.CreateOrderAsync(orderDto);
+
+            // Return CreatedAt route for RESTful conventions
+            return CreatedAtAction(nameof(GetOrder), new { id = createdOrder.Id }, createdOrder);
+        }
+
+        // PUT: api/Order/{id}
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> UpdateOrder(int id, [FromBody] OrderDto orderDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (id != orderDto.Id)
+                return BadRequest("Order ID mismatch.");
+
+            await _orderService.UpdateOrderAsync(orderDto);
+            return NoContent();
+        }
+
+        // DELETE: api/Order/{id}
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> DeleteOrder(int id)
+        {
+            await _orderService.DeleteOrderAsync(id);
+            return NoContent();
         }
     }
 }

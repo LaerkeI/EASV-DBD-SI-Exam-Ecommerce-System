@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using OrderManagementService.Entities;
 using Shared.Contracts;
+using Shared.DTOs;
 
 namespace OrderManagementService.Mappers
 {
@@ -8,6 +9,10 @@ namespace OrderManagementService.Mappers
     {
         public OrderMappingProfile()
         {
+            // Map between Order and its DTOs
+            CreateMap<Order, OrderDto>().ReverseMap();
+
+            // Map Order to OrderEvent for messaging
             CreateMap<Order, OrderEvent>();
         }
     }

@@ -1,5 +1,10 @@
 # EASV-DBD-SI-Ecommerce-System
 
+## Common errors
+`An exception has been raised that is likely due to a transient failure. Consider enabling transient error resiliency by adding 'EnableRetryOnFailure' to the 'UseSqlServer' call`
+= The database is not up yet. Give it a moment and try again. That usually solves the problem. 
+
+
 ## Exam Notes
 
 ### RabbitMQ Messaging
