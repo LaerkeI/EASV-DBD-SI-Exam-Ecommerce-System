@@ -3,7 +3,7 @@ using OrderManagementService.Infrastructure.Messaging;
 using OrderManagementService.Application.Interfaces;
 using OrderManagementService.Application.DTOs;
 using OrderManagementService.Domain.Entities;
-using OrderManagementService.Infrastructure.Messaging.Contracts;
+using OrderManagementService.Infrastructure.Messaging.Events;
 
 namespace OrderManagementService.Application.Services
 {

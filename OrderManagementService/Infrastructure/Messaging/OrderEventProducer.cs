@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using OrderManagementService.Infrastructure.Messaging.Contracts;
+using OrderManagementService.Infrastructure.Messaging.Events;
 using RabbitMQ.Client;
 using System.Text;
 
