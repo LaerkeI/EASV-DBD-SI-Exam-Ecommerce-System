@@ -1,16 +1,22 @@
 ﻿using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using Newtonsoft.Json;
-using Shared.Contracts;
-using System;
 using System.Text;
+using InventoryManagementService.Infrastructure.Messaging.Events;
+using InventoryManagementService.Application.Interfaces;
 
-namespace InventoryManagementService.Services
+namespace InventoryManagementService.Infrastructure.Messaging
 {
     public class OrderEventConsumer : BackgroundService
     {
         private readonly string _hostName = "rabbitmq"; // RabbitMQ server host. Service name from docker-compose.yml
         private readonly string _queueName = "orderQueue"; // Queue name
+        private readonly IInventoryService _inventoryService;
+
+        public OrderEventConsumer(IInventoryService inventoryService)
+        {
+            _inventoryService = inventoryService;
+        }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
@@ -47,7 +53,15 @@ namespace InventoryManagementService.Services
                 try
                 {
                     var orderEvent = JsonConvert.DeserializeObject<OrderEvent>(message);
-                    Console.WriteLine($"Received Order Event: Id = {orderEvent?.Id}, Date = {DateTime.Now}");
+                    if (orderEvent != null)
+                    {
+                        Console.WriteLine($"Processing OrderEvent: OrderId = {orderEvent.Id}");
+
+                        foreach (var orderLine in orderEvent.OrderLines)
+                        {
+                            _inventoryService.UpdateStock(orderLine.ISBN, orderLine.Quantity);
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -59,7 +73,7 @@ namespace InventoryManagementService.Services
                                  autoAck: true,
                                  consumer: consumer);
 
-            while(!stoppingToken.IsCancellationRequested)
+            while (!stoppingToken.IsCancellationRequested)
             {
                 await Task.Delay(1000, stoppingToken);
             }

@@ -15,6 +15,7 @@ namespace OrderManagementService.Application.Mappers
 
             // Map Order to OrderEvent for messaging
             CreateMap<Order, OrderEvent>();
+            CreateMap<OrderLine, OrderLineEvent>();
         }
     }
 
