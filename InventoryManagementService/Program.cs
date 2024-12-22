@@ -1,7 +1,9 @@
 using InventoryManagementService.Application.Interfaces;
 using InventoryManagementService.Application.Services;
+using InventoryManagementService.Infrastructure.Data;
 using InventoryManagementService.Infrastructure.Messaging;
-using Microsoft.Data.SqlClient;
+using InventoryManagementService.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace InventoryManagementService
 {
@@ -11,15 +13,15 @@ namespace InventoryManagementService
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-            builder.Services.AddSingleton<SqlConnection>(sp =>
-            {
-                var configuration = sp.GetRequiredService<IConfiguration>();
-                var connectionString = configuration.GetConnectionString("MSSQLConnection");
-                return new SqlConnection(connectionString);
-            });
+            // Register the DbContext with Dependency Injection (using SQL Server in this case)
+            builder.Services.AddDbContext<InventoryContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("MSSQLConnection")));
 
-            builder.Services.AddSingleton<IInventoryService, InventoryService>();
+            // Register AutoMapper and your mapping profiles
+            builder.Services.AddAutoMapper(typeof(Program));
+
+            builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
+            builder.Services.AddScoped<IInventoryService, InventoryService>();
             builder.Services.AddSingleton<OrderEventConsumer>();
             builder.Services.AddHostedService<OrderEventConsumer>();
             builder.Services.AddControllers();

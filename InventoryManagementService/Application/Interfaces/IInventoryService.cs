@@ -1,10 +1,15 @@
-﻿using InventoryManagementService.Infrastructure.Messaging.Events;
+﻿using InventoryManagementService.Application.DTOs;
+using InventoryManagementService.Infrastructure.Messaging.Events;
 
 namespace InventoryManagementService.Application.Interfaces
 {
     public interface IInventoryService
     {
-        void UpdateStock(string id, int quantity);
+        Task<IEnumerable<InventoryItemDto>> GetInventoryItemsAsync();
+        Task<InventoryItemDto> GetInventoryItemByIdAsync(string id);
+        Task<InventoryItemDto> CreateInventoryItemAsync(InventoryItemDto inventoryItemDto);
+        Task UpdateInventoryItemAsync(InventoryItemDto inventoryItemDto);
+        Task DeleteOrderAsync(string id);
     }
 
 }

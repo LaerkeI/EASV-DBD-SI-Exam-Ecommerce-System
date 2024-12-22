@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System.Text;
 using InventoryManagementService.Infrastructure.Messaging.Events;
 using InventoryManagementService.Application.Interfaces;
+using InventoryManagementService.Application.DTOs;
 
 namespace InventoryManagementService.Infrastructure.Messaging
 {
@@ -11,11 +12,13 @@ namespace InventoryManagementService.Infrastructure.Messaging
     {
         private readonly string _hostName = "rabbitmq"; // RabbitMQ server host. Service name from docker-compose.yml
         private readonly string _queueName = "orderQueue"; // Queue name
+        //private readonly IServiceProvider _serviceProvider; // Inject IServiceProvider
         private readonly IInventoryService _inventoryService;
 
-        public OrderEventConsumer(IInventoryService inventoryService)
+        public OrderEventConsumer(/*IServiceProvider serviceProvider, */IInventoryService inventoryService)
         {
-            _inventoryService = inventoryService;
+            //_serviceProvider = serviceProvider;
+            _inventoryService = inventoryService; // Set the inventory service
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -44,7 +47,7 @@ namespace InventoryManagementService.Infrastructure.Messaging
                                  arguments: null);
 
             var consumer = new EventingBasicConsumer(channel);
-            consumer.Received += (model, ea) =>
+            consumer.Received += async (model, ea) =>
             {
                 var body = ea.Body.ToArray();
                 var message = Encoding.UTF8.GetString(body);
@@ -59,7 +62,19 @@ namespace InventoryManagementService.Infrastructure.Messaging
 
                         foreach (var orderLine in orderEvent.OrderLines)
                         {
-                            _inventoryService.UpdateStock(orderLine.ISBN, orderLine.Quantity);
+                            // Map orderLine to InventoryItemDto
+                            var inventoryItemDto = new InventoryItemDto
+                            {
+                                Id = orderLine.ItemId,
+                                Quantity = -orderLine.Quantity // Negative because stock decreases
+                            };
+
+                            //// Resolve IInventoryService from IServiceProvider and call the service to update the inventory
+                            //using (var scope = _serviceProvider.CreateScope())
+                            //{
+                            //    var inventoryService = scope.ServiceProvider.GetRequiredService<IInventoryService>();
+                                await _inventoryService.UpdateInventoryItemAsync(inventoryItemDto);
+                            //}
                         }
                     }
                 }
