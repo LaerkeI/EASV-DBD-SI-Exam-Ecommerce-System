@@ -12,13 +12,11 @@ namespace InventoryManagementService.Infrastructure.Messaging
     {
         private readonly string _hostName = "rabbitmq"; // RabbitMQ server host. Service name from docker-compose.yml
         private readonly string _queueName = "orderQueue"; // Queue name
-        //private readonly IServiceProvider _serviceProvider; // Inject IServiceProvider
-        private readonly IInventoryService _inventoryService;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
 
-        public OrderEventConsumer(/*IServiceProvider serviceProvider, */IInventoryService inventoryService)
+        public OrderEventConsumer(IServiceScopeFactory serviceScopeFactory)
         {
-            //_serviceProvider = serviceProvider;
-            _inventoryService = inventoryService; // Set the inventory service
+            _serviceScopeFactory = serviceScopeFactory;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -69,12 +67,12 @@ namespace InventoryManagementService.Infrastructure.Messaging
                                 Quantity = -orderLine.Quantity // Negative because stock decreases
                             };
 
-                            //// Resolve IInventoryService from IServiceProvider and call the service to update the inventory
-                            //using (var scope = _serviceProvider.CreateScope())
-                            //{
-                            //    var inventoryService = scope.ServiceProvider.GetRequiredService<IInventoryService>();
-                                await _inventoryService.UpdateInventoryItemAsync(inventoryItemDto);
-                            //}
+                            // Resolve IInventoryService from IServiceProvider and call the service to update the inventory
+                            using (var scope = _serviceScopeFactory.CreateScope())
+                            {
+                                var inventoryService = scope.ServiceProvider.GetRequiredService<IInventoryService>();
+                                await inventoryService.UpdateInventoryItemAsync(inventoryItemDto);
+                            }
                         }
                     }
                 }

@@ -10,17 +10,22 @@ namespace OrderManagementService.Infrastructure.Data
         }
 
         public DbSet<Order> Orders { get; set; }
-
         public DbSet<OrderLine> OrderLines { get; set; }
+
 
         // Configuring the entity using Fluent API
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Explicitly configure the primary key for Order as Id
+            modelBuilder.Entity<Order>()
+                .HasKey(o => o.Id);
+
             // Configure the Id property of Order to be auto-incremented
             modelBuilder.Entity<Order>()
                 .Property(o => o.Id)
                 .ValueGeneratedOnAdd();
 
+            // Configure composite key for OrderLine
             modelBuilder.Entity<OrderLine>()
                 .HasKey(ol => new { ol.OrderId, ol.ItemId }); // Composite Key (OrderId, ItemId)
 
