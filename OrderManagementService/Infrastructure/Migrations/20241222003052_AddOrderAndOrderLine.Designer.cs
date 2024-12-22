@@ -7,14 +7,13 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OrderManagementService.Infrastructure.Data;
 
-
 #nullable disable
 
 namespace OrderManagementService.Migrations
 {
     [DbContext(typeof(OrderContext))]
-    [Migration("20241215160501_AddOrderLineRelationship")]
-    partial class AddOrderLineRelationship
+    [Migration("20241222003052_AddOrderAndOrderLine")]
+    partial class AddOrderAndOrderLine
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,7 +25,7 @@ namespace OrderManagementService.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("OrderManagementService.Entities.Order", b =>
+            modelBuilder.Entity("OrderManagementService.Domain.Entities.Order", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -42,34 +41,25 @@ namespace OrderManagementService.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("OrderManagementService.Entities.OrderLine", b =>
+            modelBuilder.Entity("OrderManagementService.Domain.Entities.OrderLine", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ISBN")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
+
+                    b.Property<string>("ItemId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
+                    b.HasKey("OrderId", "ItemId");
 
                     b.ToTable("OrderLines");
                 });
 
-            modelBuilder.Entity("OrderManagementService.Entities.OrderLine", b =>
+            modelBuilder.Entity("OrderManagementService.Domain.Entities.OrderLine", b =>
                 {
-                    b.HasOne("OrderManagementService.Entities.Order", "Order")
+                    b.HasOne("OrderManagementService.Domain.Entities.Order", "Order")
                         .WithMany("OrderLines")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -78,7 +68,7 @@ namespace OrderManagementService.Migrations
                     b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("OrderManagementService.Entities.Order", b =>
+            modelBuilder.Entity("OrderManagementService.Domain.Entities.Order", b =>
                 {
                     b.Navigation("OrderLines");
                 });

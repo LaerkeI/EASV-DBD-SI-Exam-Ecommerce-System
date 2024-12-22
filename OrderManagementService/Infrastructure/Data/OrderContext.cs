@@ -16,21 +16,20 @@ namespace OrderManagementService.Infrastructure.Data
         // Configuring the entity using Fluent API
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Configure the Id property of Order and OrderLine to be auto-incremented
+            // Configure the Id property of Order to be auto-incremented
             modelBuilder.Entity<Order>()
                 .Property(o => o.Id)
                 .ValueGeneratedOnAdd();
 
             modelBuilder.Entity<OrderLine>()
-                .Property(ol => ol.Id)
-                .ValueGeneratedOnAdd(); // Ensure OrderLine.Id is also auto-incremented
+                .HasKey(ol => new { ol.OrderId, ol.ItemId }); // Composite Key (OrderId, ItemId)
 
             // Configure one-to-many relationship between Order and OrderLine
             modelBuilder.Entity<Order>()
                 .HasMany(o => o.OrderLines)
                 .WithOne(ol => ol.Order)
                 .HasForeignKey(ol => ol.OrderId)
-                .OnDelete(DeleteBehavior.Cascade);  // Optional: Specify cascade delete behavior if needed
+                .OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(modelBuilder);
         }

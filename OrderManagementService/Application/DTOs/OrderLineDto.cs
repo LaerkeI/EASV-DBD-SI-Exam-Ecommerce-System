@@ -2,7 +2,7 @@
 {
     public class OrderLineDto
     {
-        public string ISBN { get; set; }
+        public string ItemId { get; set; }
         public int Quantity { get; set; }
     }
 }
