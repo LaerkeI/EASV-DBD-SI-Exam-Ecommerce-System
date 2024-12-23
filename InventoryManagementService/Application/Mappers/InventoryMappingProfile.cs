@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using InventoryManagementService.Application.DTOs;
 using InventoryManagementService.Domain.Entities;
+using InventoryManagementService.Infrastructure.Messaging.Events;
 
 namespace InventoryManagementService.Application.Mappers
 {
@@ -11,9 +12,9 @@ namespace InventoryManagementService.Application.Mappers
             // Map between InventoryItem and its DTOs
             CreateMap<InventoryItem, InventoryItemDto>().ReverseMap();
 
-            // Map Order to OrderEvent for messaging
-            //CreateMap<Order, OrderEvent>();
-            //CreateMap<OrderLine, OrderLineEvent>();
+            // Map InventoryItem to OutOfStockEvent for messaging
+            CreateMap<InventoryItem, OutOfStockEvent>()
+            .ForMember(dest => dest.ItemId, opt => opt.MapFrom(src => src.Id));
         }
     }
 }

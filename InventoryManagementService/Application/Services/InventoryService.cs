@@ -2,6 +2,7 @@
 using InventoryManagementService.Application.DTOs;
 using InventoryManagementService.Application.Interfaces;
 using InventoryManagementService.Domain.Entities;
+using InventoryManagementService.Infrastructure.Messaging;
 using InventoryManagementService.Infrastructure.Messaging.Events;
 
 namespace InventoryManagementService.Application.Services
@@ -9,12 +10,14 @@ namespace InventoryManagementService.Application.Services
     public class InventoryService : IInventoryService
     {
         private readonly IMapper _mapper;
-        public readonly IInventoryRepository _inventoryRepository;
+        private readonly IInventoryRepository _inventoryRepository;
+        private readonly OutOfStockEventProducer _outOfStockEventProducer;
 
-        public InventoryService(IMapper mapper, IInventoryRepository inventoryRepository)
+        public InventoryService(IMapper mapper, IInventoryRepository inventoryRepository, OutOfStockEventProducer outOfStockEventProducer)
         {
             _mapper = mapper;
             _inventoryRepository = inventoryRepository;
+            _outOfStockEventProducer = outOfStockEventProducer;
         }
         
         public async Task<IEnumerable<InventoryItemDto>> GetInventoryItemsAsync()
@@ -76,9 +79,10 @@ namespace InventoryManagementService.Application.Services
             {
                 // Send message to CatalogManagementService to remove it from display list.
                 Console.WriteLine("Sending message to CatalogManagementService ...");
+                // Publish event after saving
+                var outOfStockEvent = _mapper.Map<OutOfStockEvent>(existingInventoryItem);
+                await _outOfStockEventProducer.PublishOutOfStockEventAsync(outOfStockEvent);
             }
-
-            //_mapper.Map(inventoryItemDto, existingInventoryItem);
 
             await _inventoryRepository.UpdateInventoryItemAsync(existingInventoryItem);
         }
