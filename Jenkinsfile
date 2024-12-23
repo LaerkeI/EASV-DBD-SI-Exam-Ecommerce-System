@@ -3,6 +3,7 @@ pipeline {
     environment {
         IMAGE_NAME_ORDER = 'laerkeimeland/order-management-service'
         IMAGE_NAME_INVENTORY = 'laerkeimeland/inventory-management-service'
+        IMAGE_NAME_CATALOG = 'laerkeimeland/catalog-management-service'
     }
     stages {
         stage('Clone Repository') {
@@ -29,6 +30,7 @@ pipeline {
                     docker-compose build --build-arg BUILD_NUMBER=${BUILD_NUMBER}
                     docker tag ${IMAGE_NAME_ORDER}:${BUILD_NUMBER} ${IMAGE_NAME_ORDER}:latest
                     docker tag ${IMAGE_NAME_INVENTORY}:${BUILD_NUMBER} ${IMAGE_NAME_INVENTORY}:latest
+                    docker tag ${IMAGE_NAME_CATALOG}:${BUILD_NUMBER} ${IMAGE_NAME_CATALOG}:latest
                     """
                 }
             }
@@ -46,6 +48,9 @@ pipeline {
                         
                         docker push ${env.IMAGE_NAME_INVENTORY}:${env.BUILD_NUMBER}
                         docker push ${env.IMAGE_NAME_INVENTORY}:latest
+
+                        docker push ${env.IMAGE_NAME_CATALOG}:${env.BUILD_NUMBER}
+                        docker push ${env.IMAGE_NAME_CATALOG}:latest
                         """
                     }
                 }
