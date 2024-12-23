@@ -47,6 +47,28 @@ services:
     depends_on:
       - inventory-mssql-server
       - rabbitmq
+      - catalog-management-service
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: guest
+      RABBITMQ_PASS: guest
+    networks:
+    - ecommerce-network
+
+  catalog-management-service:
+    build:
+      context: .
+      dockerfile: CatalogManagementService/Dockerfile
+    #   args:
+    #     BUILD_NUMBER: ${BUILD_NUMBER}
+    # image: laerkeimeland/catalog-management-service:${BUILD_NUMBER}
+    container_name: "catalog-management-service"
+    ports:
+      - "8003:80"
+    depends_on:
+      - catalog-mongodb-server
+      - rabbitmq
     environment:
       RABBITMQ_HOST: rabbitmq
       RABBITMQ_PORT: 5672
@@ -80,7 +102,6 @@ services:
       - inventory-mssql-data:/var/opt/mssql
     networks:
       - ecommerce-network
-
 
   catalog-mongodb-server:
     image: mongodb/mongodb-community-server:7.0.5-ubuntu2204
