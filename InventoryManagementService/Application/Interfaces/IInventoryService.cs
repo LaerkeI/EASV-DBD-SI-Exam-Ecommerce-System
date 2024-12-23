@@ -9,7 +9,8 @@ namespace InventoryManagementService.Application.Interfaces
         Task<InventoryItemDto> GetInventoryItemByIdAsync(string id);
         Task<InventoryItemDto> CreateInventoryItemAsync(InventoryItemDto inventoryItemDto);
         Task UpdateInventoryItemAsync(InventoryItemDto inventoryItemDto);
-        Task DeleteOrderAsync(string id);
+        Task ReduceQuantityForInventoryItemAsync(InventoryItemDto inventoryItemDto);
+        Task DeleteInventoryItemAsync(string id);
     }
 
 }

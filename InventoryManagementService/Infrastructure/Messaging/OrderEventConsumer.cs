@@ -64,14 +64,14 @@ namespace InventoryManagementService.Infrastructure.Messaging
                             var inventoryItemDto = new InventoryItemDto
                             {
                                 Id = orderLine.ItemId,
-                                Quantity = -orderLine.Quantity // Negative because stock decreases
+                                Quantity = orderLine.Quantity
                             };
 
                             // Resolve IInventoryService from IServiceProvider and call the service to update the inventory
                             using (var scope = _serviceScopeFactory.CreateScope())
                             {
                                 var inventoryService = scope.ServiceProvider.GetRequiredService<IInventoryService>();
-                                await inventoryService.UpdateInventoryItemAsync(inventoryItemDto);
+                                await inventoryService.ReduceQuantityForInventoryItemAsync(inventoryItemDto);
                             }
                         }
                     }
