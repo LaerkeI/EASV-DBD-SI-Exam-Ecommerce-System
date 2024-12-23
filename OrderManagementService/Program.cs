@@ -1,4 +1,9 @@
-using OrderManagementService.Services;
+using Microsoft.EntityFrameworkCore;
+using OrderManagementService.Application.Interfaces;
+using OrderManagementService.Application.Services;
+using OrderManagementService.Infrastructure.Data;
+using OrderManagementService.Infrastructure.Messaging;
+using OrderManagementService.Infrastructure.Repositories;
 
 namespace OrderManagementService
 {
@@ -8,10 +13,17 @@ namespace OrderManagementService
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-            builder.Services.AddSingleton<IOrderService, OrderService>();
+            // Register the DbContext with Dependency Injection (using SQL Server in this case)
+            builder.Services.AddDbContext<OrderContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("MSSQLConnection")));
+            
+            // Register AutoMapper and your mapping profiles
+            builder.Services.AddAutoMapper(typeof(Program));
+            
+            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+            builder.Services.AddScoped<IOrderService, OrderService>();
+            builder.Services.AddSingleton<OrderEventProducer>();
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 

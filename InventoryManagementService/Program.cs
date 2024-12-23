@@ -1,4 +1,9 @@
-using InventoryManagementService.Services;
+using InventoryManagementService.Application.Interfaces;
+using InventoryManagementService.Application.Services;
+using InventoryManagementService.Infrastructure.Data;
+using InventoryManagementService.Infrastructure.Messaging;
+using InventoryManagementService.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace InventoryManagementService
 {
@@ -8,11 +13,18 @@ namespace InventoryManagementService
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-            builder.Services.AddSingleton<OrderEventConsumer>();
+            // Register the DbContext with Dependency Injection (using SQL Server in this case)
+            builder.Services.AddDbContext<InventoryContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("MSSQLConnection")));
+
+            // Register AutoMapper and your mapping profiles
+            builder.Services.AddAutoMapper(typeof(Program));
+
+            builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
+            builder.Services.AddScoped<IInventoryService, InventoryService>();
             builder.Services.AddHostedService<OrderEventConsumer>();
+            builder.Services.AddSingleton<OutOfStockEventProducer>();
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 

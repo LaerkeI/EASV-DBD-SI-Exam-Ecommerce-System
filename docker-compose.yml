@@ -23,6 +23,7 @@ services:
     ports:
       - "8000:80"
     depends_on:
+      - order-mssql-server
       - rabbitmq
       - inventory-management-service
     environment:
@@ -44,6 +45,29 @@ services:
     ports:
       - "8002:80"
     depends_on:
+      - inventory-mssql-server
+      - rabbitmq
+      - catalog-management-service
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: guest
+      RABBITMQ_PASS: guest
+    networks:
+    - ecommerce-network
+
+  catalog-management-service:
+    build:
+      context: .
+      dockerfile: CatalogManagementService/Dockerfile
+    #   args:
+    #     BUILD_NUMBER: ${BUILD_NUMBER}
+    # image: laerkeimeland/catalog-management-service:${BUILD_NUMBER}
+    container_name: "catalog-management-service"
+    ports:
+      - "8003:80"
+    depends_on:
+      - catalog-mongodb-server
       - rabbitmq
     environment:
       RABBITMQ_HOST: rabbitmq
@@ -52,7 +76,59 @@ services:
       RABBITMQ_PASS: guest
     networks:
     - ecommerce-network
-    
+
+  order-mssql-server:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: order-mssql-server
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=MyStrong!Passw0rd
+    ports:
+      - "1435:1433"
+    volumes:
+      - order-mssql-data:/var/opt/mssql
+    networks:
+      - ecommerce-network
+
+  inventory-mssql-server:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: inventory-mssql-server
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=MyStrong!Passw0rd
+    ports:
+      - "1436:1433"
+    volumes:
+      - inventory-mssql-data:/var/opt/mssql
+    networks:
+      - ecommerce-network
+
+  catalog-mongodb-server:
+    image: mongodb/mongodb-community-server:7.0.5-ubuntu2204
+    container_name: catalog-mongodb-server
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGODB_INITDB_ROOT_USERNAME=user
+      - MONGODB_INITDB_ROOT_PASSWORD=pass
+    volumes:
+      - catalog-mongo-data:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks:
+      - ecommerce-network
+
+  catalog-redis-caching-server:
+    image: redis:latest
+    container_name: catalog-redis-caching-server
+    ports:
+      - "6379:6379"
+    networks:
+      - ecommerce-network
+
+volumes:
+  order-mssql-data:
+  inventory-mssql-data:
+  catalog-mongo-data:   
 
 networks:
   ecommerce-network:
