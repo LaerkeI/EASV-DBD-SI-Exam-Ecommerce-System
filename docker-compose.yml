@@ -60,9 +60,9 @@ services:
     build:
       context: .
       dockerfile: CatalogManagementService/Dockerfile
-    #   args:
-    #     BUILD_NUMBER: ${BUILD_NUMBER}
-    # image: laerkeimeland/catalog-management-service:${BUILD_NUMBER}
+      args:
+        BUILD_NUMBER: ${BUILD_NUMBER}
+    image: laerkeimeland/catalog-management-service:${BUILD_NUMBER}
     container_name: "catalog-management-service"
     ports:
       - "8003:80"
