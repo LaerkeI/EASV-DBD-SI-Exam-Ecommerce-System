@@ -3,9 +3,6 @@ using InventoryManagementService.Infrastructure.Repositories;
 using InventoryManagementService.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace InventoryManagementService.Tests.Repositories
 {
@@ -14,7 +11,7 @@ namespace InventoryManagementService.Tests.Repositories
         private InventoryContext CreateInMemoryContext()
         {
             var options = new DbContextOptionsBuilder<InventoryContext>()
-                .UseInMemoryDatabase(databaseName: "TestInventoryDb")
+                .UseInMemoryDatabase(databaseName: "TestInventoryDB")
                 .Options;
             return new InventoryContext(options);
         }
