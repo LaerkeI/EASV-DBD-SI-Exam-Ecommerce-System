@@ -35,6 +35,21 @@ pipeline {
                 }
             }
         }
+        stage('Run Tests') {
+            steps {
+                script {
+                    // Navigate to test project folders and run tests
+                    bat """
+                    cd EASV-DBD-SI-Ecommerce-System/OrderManagementService.Tests
+                    dotnet test --logger:trx
+                    cd ../InventoryManagementService.Tests
+                    dotnet test --logger:trx
+                    cd ../CatalogManagementService.Tests
+                    dotnet test --logger:trx
+                    """
+                }
+            }
+        }
         stage('Push to DockerHub') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'DockerHub', usernameVariable: 'DOCKERHUB_USR', passwordVariable: 'DOCKERHUB_PSW')]) {
