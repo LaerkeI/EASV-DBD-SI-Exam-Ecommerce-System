@@ -14,7 +14,7 @@ namespace OrderManagementService.Application.Mappers
             CreateMap<OrderLine, OrderLineDto>().ReverseMap();
 
             // Map Order to OrderEvent for messaging
-            CreateMap<Order, OrderEvent>();
+            CreateMap<Order, CreatedOrderEvent>();
             CreateMap<OrderLine, OrderLineEvent>();
         }
     }

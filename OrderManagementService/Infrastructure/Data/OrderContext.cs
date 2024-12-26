@@ -18,11 +18,11 @@ namespace OrderManagementService.Infrastructure.Data
         {
             // Explicitly configure the primary key for Order as Id
             modelBuilder.Entity<Order>()
-                .HasKey(o => o.Id);
+                .HasKey(o => o.OrderId);
 
             // Configure the Id property of Order to be auto-incremented
             modelBuilder.Entity<Order>()
-                .Property(o => o.Id)
+                .Property(o => o.OrderId)
                 .ValueGeneratedOnAdd();
 
             // Configure composite key for OrderLine

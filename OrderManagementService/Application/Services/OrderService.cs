@@ -11,9 +11,9 @@ namespace OrderManagementService.Application.Services
     {
         private readonly IMapper _mapper;
         private readonly IOrderRepository _orderRepository;
-        private readonly OrderEventProducer _orderEventProducer;
+        private readonly CreatedOrderEventProducer _orderEventProducer;
 
-        public OrderService(IMapper mapper, IOrderRepository orderRepository, OrderEventProducer orderEventProducer)
+        public OrderService(IMapper mapper, IOrderRepository orderRepository, CreatedOrderEventProducer orderEventProducer)
         {
             _mapper = mapper;
             _orderRepository = orderRepository;
@@ -26,9 +26,9 @@ namespace OrderManagementService.Application.Services
             return _mapper.Map<IEnumerable<OrderDto>>(orders);
         }
 
-        public async Task<OrderDto> GetOrderAsync(int id)
+        public async Task<OrderDto> GetOrderByOrderIdAsync(int orderId)
         {
-            var order = await _orderRepository.GetOrderByIdAsync(id);
+            var order = await _orderRepository.GetOrderByOrderIdAsync(orderId);
             return _mapper.Map<OrderDto>(order);
         }
 
@@ -39,7 +39,7 @@ namespace OrderManagementService.Application.Services
             var createdOrder = await _orderRepository.AddOrderAsync(order);
 
             // Publish event after saving
-            var orderEvent = _mapper.Map<OrderEvent>(createdOrder);
+            var orderEvent = _mapper.Map<CreatedOrderEvent>(createdOrder);
             await _orderEventProducer.PublishOrderEventAsync(orderEvent);
 
             return _mapper.Map<OrderDto>(createdOrder);
@@ -47,7 +47,7 @@ namespace OrderManagementService.Application.Services
 
         public async Task UpdateOrderAsync(OrderDto orderDto) // But would this method even be realistical? It is generally not possible to update an order
         {
-            var existingOrder = await _orderRepository.GetOrderByIdAsync(orderDto.Id);
+            var existingOrder = await _orderRepository.GetOrderByOrderIdAsync(orderDto.OrderId);
             if (existingOrder != null)
             {
                 _mapper.Map(orderDto, existingOrder);
@@ -55,9 +55,9 @@ namespace OrderManagementService.Application.Services
             }
         }
 
-        public async Task DeleteOrderAsync(int id)
+        public async Task DeleteOrderAsync(int orderId)
         {
-            await _orderRepository.DeleteOrderAsync(id);
+            await _orderRepository.DeleteOrderAsync(orderId);
         }
     }
 }

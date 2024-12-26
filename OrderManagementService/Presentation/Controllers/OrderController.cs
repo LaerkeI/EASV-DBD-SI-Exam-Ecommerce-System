@@ -23,11 +23,11 @@ namespace OrderManagementService.Presentation.Controllers
             return Ok(orders);
         }
 
-        // GET: api/Order/{id}
-        [HttpGet("{id:int}")]
-        public async Task<ActionResult<OrderDto>> GetOrder(int id)
+        // GET: api/Order/{orderId}
+        [HttpGet("{orderId:int}")]
+        public async Task<ActionResult<OrderDto>> GetOrderByOrderId(int orderId)
         {
-            var order = await _orderService.GetOrderAsync(id);
+            var order = await _orderService.GetOrderByOrderIdAsync(orderId);
             if (order == null)
                 return NotFound();
 
@@ -44,28 +44,28 @@ namespace OrderManagementService.Presentation.Controllers
             var createdOrder = await _orderService.CreateOrderAsync(orderDto);
 
             // Return CreatedAt route for RESTful conventions
-            return CreatedAtAction(nameof(GetOrder), new { id = createdOrder.Id }, createdOrder);
+            return CreatedAtAction(nameof(GetOrderByOrderId), new { orderId = createdOrder.OrderId }, createdOrder);
         }
 
-        // PUT: api/Order/{id}
-        [HttpPut("{id:int}")]
-        public async Task<IActionResult> UpdateOrder(int id, [FromBody] OrderDto orderDto)
+        // PUT: api/Order/{orderId}
+        [HttpPut("{orderId:int}")]
+        public async Task<IActionResult> UpdateOrder(int orderId, [FromBody] OrderDto orderDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (id != orderDto.Id)
-                return BadRequest("Order ID mismatch.");
+            if (orderId != orderDto.OrderId)
+                return BadRequest("Order OrderID mismatch.");
 
             await _orderService.UpdateOrderAsync(orderDto);
             return NoContent();
         }
 
-        // DELETE: api/Order/{id}
-        [HttpDelete("{id:int}")]
-        public async Task<IActionResult> DeleteOrder(int id)
+        // DELETE: api/Order/{orderId}
+        [HttpDelete("{orderId:int}")]
+        public async Task<IActionResult> DeleteOrder(int orderId)
         {
-            await _orderService.DeleteOrderAsync(id);
+            await _orderService.DeleteOrderAsync(orderId);
             return NoContent();
         }
     }

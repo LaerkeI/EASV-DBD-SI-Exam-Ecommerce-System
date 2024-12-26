@@ -26,9 +26,9 @@ namespace InventoryManagementService.Application.Services
             return _mapper.Map<IEnumerable<InventoryItemDto>>(inventoryItems);
         }
 
-        public async Task<InventoryItemDto> GetInventoryItemByIdAsync(string id)
+        public async Task<InventoryItemDto> GetInventoryItemByItemIdAsync(string itemId)
         {
-            var order = await _inventoryRepository.GetInventoryItemByIdAsync(id);
+            var order = await _inventoryRepository.GetInventoryItemByItemIdAsync(itemId);
             return _mapper.Map<InventoryItemDto>(order);
         }
 
@@ -47,8 +47,8 @@ namespace InventoryManagementService.Application.Services
 
         public async Task UpdateInventoryItemAsync(InventoryItemDto inventoryItemDto) //For restocking InventoryItem
         {
-            Console.WriteLine($"Updating stock for book = {inventoryItemDto.Id}. Stock lowered by {inventoryItemDto.Quantity}");
-            var existingInventoryItem = await _inventoryRepository.GetInventoryItemByIdAsync(inventoryItemDto.Id);
+            Console.WriteLine($"Updating stock for book = {inventoryItemDto.ItemId}. Stock lowered by {inventoryItemDto.Quantity}");
+            var existingInventoryItem = await _inventoryRepository.GetInventoryItemByItemIdAsync(inventoryItemDto.ItemId);
             if (existingInventoryItem != null)
             {
                 _mapper.Map(inventoryItemDto, existingInventoryItem);
@@ -58,19 +58,19 @@ namespace InventoryManagementService.Application.Services
 
         public async Task ReduceQuantityForInventoryItemAsync(InventoryItemDto inventoryItemDto)
         {
-            Console.WriteLine($"Attempting to update stock for item = {inventoryItemDto.Id}. Stock lowered by {inventoryItemDto.Quantity}");
+            Console.WriteLine($"Attempting to update stock for item = {inventoryItemDto.ItemId}. Stock lowered by {inventoryItemDto.Quantity}");
 
-            var existingInventoryItem = await _inventoryRepository.GetInventoryItemByIdAsync(inventoryItemDto.Id);
+            var existingInventoryItem = await _inventoryRepository.GetInventoryItemByItemIdAsync(inventoryItemDto.ItemId);
 
             if (existingInventoryItem == null)
             {
-                throw new Exception($"Inventory item with Id {inventoryItemDto.Id} not found.");
+                throw new Exception($"Inventory item with ItemId {inventoryItemDto.ItemId} not found.");
             }
 
             // Check if the quantity requested is available in stock
             if (existingInventoryItem.Quantity < inventoryItemDto.Quantity)
             {
-                throw new InvalidOperationException($"Insufficient stock. Available stock for item {inventoryItemDto.Id} is {existingInventoryItem.Quantity}. Requested quantity is {inventoryItemDto.Quantity}.");
+                throw new InvalidOperationException($"Insufficient stock. Available stock for item {inventoryItemDto.ItemId} is {existingInventoryItem.Quantity}. Requested quantity is {inventoryItemDto.Quantity}.");
             }
 
             existingInventoryItem.Quantity -= inventoryItemDto.Quantity;
@@ -88,9 +88,9 @@ namespace InventoryManagementService.Application.Services
         }
 
 
-        public async Task DeleteInventoryItemAsync(string id)
+        public async Task DeleteInventoryItemAsync(string itemId)
         {
-            await _inventoryRepository.DeleteInventoryItemAsync(id);
+            await _inventoryRepository.DeleteInventoryItemAsync(itemId);
         }
     }
 }

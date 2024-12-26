@@ -5,7 +5,7 @@
 namespace InventoryManagementService.Migrations
 {
     /// <inheritdoc />
-    public partial class AddInventoryItem : Migration
+    public partial class AddInventoryItemWithItemId : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -14,12 +14,12 @@ namespace InventoryManagementService.Migrations
                 name: "InventoryItems",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ItemId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_InventoryItems", x => x.Id);
+                    table.PrimaryKey("PK_InventoryItems", x => x.ItemId);
                 });
         }
 

@@ -23,13 +23,13 @@ namespace InventoryManagementService.Migrations
 
             modelBuilder.Entity("InventoryManagementService.Domain.Entities.InventoryItem", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<string>("ItemId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("ItemId");
 
                     b.ToTable("InventoryItems");
                 });

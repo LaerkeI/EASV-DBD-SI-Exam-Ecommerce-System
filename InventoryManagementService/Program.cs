@@ -22,7 +22,7 @@ namespace InventoryManagementService
 
             builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
             builder.Services.AddScoped<IInventoryService, InventoryService>();
-            builder.Services.AddHostedService<OrderEventConsumer>();
+            builder.Services.AddHostedService<CreatedOrderEventConsumer>();
             builder.Services.AddSingleton<OutOfStockEventProducer>();
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();

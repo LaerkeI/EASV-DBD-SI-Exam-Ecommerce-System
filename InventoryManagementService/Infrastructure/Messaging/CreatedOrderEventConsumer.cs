@@ -8,13 +8,13 @@ using InventoryManagementService.Application.DTOs;
 
 namespace InventoryManagementService.Infrastructure.Messaging
 {
-    public class OrderEventConsumer : BackgroundService
+    public class CreatedOrderEventConsumer : BackgroundService
     {
         private readonly string _hostName = "rabbitmq"; // RabbitMQ server host. Service name from docker-compose.yml
         private readonly string _queueName = "orderQueue"; // Queue name
         private readonly IServiceScopeFactory _serviceScopeFactory;
 
-        public OrderEventConsumer(IServiceScopeFactory serviceScopeFactory)
+        public CreatedOrderEventConsumer(IServiceScopeFactory serviceScopeFactory)
         {
             _serviceScopeFactory = serviceScopeFactory;
         }
@@ -53,17 +53,17 @@ namespace InventoryManagementService.Infrastructure.Messaging
 
                 try
                 {
-                    var orderEvent = JsonConvert.DeserializeObject<OrderEvent>(message);
+                    var orderEvent = JsonConvert.DeserializeObject<CreatedOrderEvent>(message);
                     if (orderEvent != null)
                     {
-                        Console.WriteLine($"Processing OrderEvent: OrderId = {orderEvent.Id}");
+                        Console.WriteLine($"Processing CreatedOrderEvent: OrderId = {orderEvent.OrderId}");
 
                         foreach (var orderLine in orderEvent.OrderLines)
                         {
                             // Map orderLine to InventoryItemDto
                             var inventoryItemDto = new InventoryItemDto
                             {
-                                Id = orderLine.ItemId,
+                                ItemId = orderLine.ItemId,
                                 Quantity = orderLine.Quantity
                             };
 

@@ -20,10 +20,10 @@ namespace InventoryManagementService.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<InventoryItem> GetInventoryItemByIdAsync(string id)
+        public async Task<InventoryItem> GetInventoryItemByItemIdAsync(string itemId)
         {
             return await _context.InventoryItems
-                .FirstOrDefaultAsync(i => i.Id == id);
+                .FirstOrDefaultAsync(i => i.ItemId == itemId);
         }
 
         public async Task<InventoryItem> AddInventoryItemAsync(InventoryItem inventoryItem)
@@ -39,9 +39,9 @@ namespace InventoryManagementService.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteInventoryItemAsync(string id)
+        public async Task DeleteInventoryItemAsync(string itemId)
         {
-            var inventoryItem = await GetInventoryItemByIdAsync(id);
+            var inventoryItem = await GetInventoryItemByItemIdAsync(itemId);
             if (inventoryItem != null)
             {
                 _context.InventoryItems.Remove(inventoryItem);

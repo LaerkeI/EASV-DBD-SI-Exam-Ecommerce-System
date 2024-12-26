@@ -22,7 +22,7 @@ namespace OrderManagementService
             
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
             builder.Services.AddScoped<IOrderService, OrderService>();
-            builder.Services.AddSingleton<OrderEventProducer>();
+            builder.Services.AddSingleton<CreatedOrderEventProducer>();
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

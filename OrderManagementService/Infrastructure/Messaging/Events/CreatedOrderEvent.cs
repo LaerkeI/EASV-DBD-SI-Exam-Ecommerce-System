@@ -2,9 +2,9 @@
 
 namespace OrderManagementService.Infrastructure.Messaging.Events
 {
-    public class OrderEvent
+    public class CreatedOrderEvent
     {
-        public int Id { get; set; }
+        public int OrderId { get; set; }
         public DateTime OrderDate { get; set; }
 
         // List of OrderLines representing each Ebook purchased

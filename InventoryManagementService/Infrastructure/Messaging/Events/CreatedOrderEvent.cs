@@ -1,8 +1,8 @@
 ﻿namespace InventoryManagementService.Infrastructure.Messaging.Events
 {
-    public class OrderEvent
+    public class CreatedOrderEvent
     {
-        public int Id { get; set; }
+        public int OrderId { get; set; }
         public DateTime OrderDate { get; set; }
         public List<OrderLineEvent> OrderLines { get; set; }
     }

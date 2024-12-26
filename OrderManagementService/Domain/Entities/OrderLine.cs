@@ -2,7 +2,7 @@
 {
     public class OrderLine
     {
-        public string ItemId { get; set; }  //Reference to Item in "CatalogManagementService". Could be ISBN/SKU/Barcode. 
+        public string ItemId { get; set; }  //Reference to InventoryItem in "InventoryManagementService". Could be ISBN, SKU or Barcode. 
         public int Quantity { get; set; }
 
         // Foreign Key to Order

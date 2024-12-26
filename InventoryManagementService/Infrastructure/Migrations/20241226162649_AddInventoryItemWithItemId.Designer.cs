@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryManagementService.Migrations
 {
     [DbContext(typeof(InventoryContext))]
-    [Migration("20241222205308_AddInventoryItemTable")]
-    partial class AddInventoryItemTable
+    [Migration("20241226162649_AddInventoryItemWithItemId")]
+    partial class AddInventoryItemWithItemId
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,13 +26,13 @@ namespace InventoryManagementService.Migrations
 
             modelBuilder.Entity("InventoryManagementService.Domain.Entities.InventoryItem", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<string>("ItemId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("ItemId");
 
                     b.ToTable("InventoryItems");
                 });

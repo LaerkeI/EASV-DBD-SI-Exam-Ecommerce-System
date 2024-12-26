@@ -5,17 +5,17 @@ using System.Text;
 
 namespace OrderManagementService.Infrastructure.Messaging
 {
-    public class OrderEventProducer
+    public class CreatedOrderEventProducer
     {
         private readonly string _hostName = "rabbitmq";  // RabbitMQ server host (service name in docker-compose.yml)
         private readonly string _queueName = "orderQueue"; // Queue name for order events
 
-        public OrderEventProducer()
+        public CreatedOrderEventProducer()
         {
             // No dependency injection needed for RabbitMQ client in this example
         }
 
-        public async Task PublishOrderEventAsync(OrderEvent orderEvent)
+        public async Task PublishOrderEventAsync(CreatedOrderEvent orderEvent)
         {
             var factory = new ConnectionFactory()
             {

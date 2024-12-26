@@ -21,11 +21,11 @@ namespace OrderManagementService.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Order> GetOrderByIdAsync(int id)
+        public async Task<Order> GetOrderByOrderIdAsync(int orderId)
         {
             return await _context.Orders
                 .Include(o => o.OrderLines)
-                .FirstOrDefaultAsync(o => o.Id == id);
+                .FirstOrDefaultAsync(o => o.OrderId == orderId);
         }
 
         public async Task<Order> AddOrderAsync(Order order)
@@ -41,9 +41,9 @@ namespace OrderManagementService.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteOrderAsync(int id)
+        public async Task DeleteOrderAsync(int orderId)
         {
-            var order = await GetOrderByIdAsync(id);
+            var order = await GetOrderByOrderIdAsync(orderId);
             if (order != null)
             {
                 _context.Orders.Remove(order);

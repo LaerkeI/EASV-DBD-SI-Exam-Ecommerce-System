@@ -17,7 +17,7 @@ namespace InventoryManagementService.Infrastructure.Data
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<InventoryItem>(entity =>
             {
-                entity.HasKey(e => e.Id);
+                entity.HasKey(e => e.ItemId);
                 entity.Property(e => e.Quantity).IsRequired();
             });
         }

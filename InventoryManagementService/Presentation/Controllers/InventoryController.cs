@@ -23,11 +23,11 @@ namespace InventoryManagementService.Presentation.Controllers
             return Ok(inventoryItems);
         }
 
-        // GET: api/Inventory/{id}
-        [HttpGet("{id}")]
-        public async Task<ActionResult<InventoryItemDto>> GetInventoryItemById(string id)
+        // GET: api/Inventory/{itemId}
+        [HttpGet("{itemId}")]
+        public async Task<ActionResult<InventoryItemDto>> GetInventoryItemByItemId(string itemId)
         {
-            var inventoryItem = await _inventoryService.GetInventoryItemByIdAsync(id);
+            var inventoryItem = await _inventoryService.GetInventoryItemByItemIdAsync(itemId);
             if (inventoryItem == null)
                 return NotFound();
 
@@ -44,28 +44,28 @@ namespace InventoryManagementService.Presentation.Controllers
             var createdInventoryItem = await _inventoryService.CreateInventoryItemAsync(inventoryItemDto);
 
             // Return CreatedAt route for RESTful conventions
-            return CreatedAtAction(nameof(GetInventoryItemById), new { id = createdInventoryItem.Id }, createdInventoryItem);
+            return CreatedAtAction(nameof(GetInventoryItemByItemId), new { itemId = createdInventoryItem.ItemId }, createdInventoryItem);
         }
 
-        // PUT: api/Inventory/{id}
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateInventoryItem(string id, [FromBody] InventoryItemDto inventoryItemDto)
+        // PUT: api/Inventory/{itemId}
+        [HttpPut("{itemId}")]
+        public async Task<IActionResult> UpdateInventoryItem(string itemId, [FromBody] InventoryItemDto inventoryItemDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (id != inventoryItemDto.Id)
-                return BadRequest("InventoryItem ID mismatch.");
+            if (itemId != inventoryItemDto.ItemId)
+                return BadRequest("InventoryItem ItemId mismatch.");
 
             await _inventoryService.UpdateInventoryItemAsync(inventoryItemDto);
             return NoContent();
         }
 
-        // DELETE: api/Inventory/{id}
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteInventoryItem(string id)
+        // DELETE: api/Inventory/{itemId}
+        [HttpDelete("{itemId}")]
+        public async Task<IActionResult> DeleteInventoryItem(string itemId)
         {
-            await _inventoryService.DeleteInventoryItemAsync(id);
+            await _inventoryService.DeleteInventoryItemAsync(itemId);
             return NoContent();
         }
     }

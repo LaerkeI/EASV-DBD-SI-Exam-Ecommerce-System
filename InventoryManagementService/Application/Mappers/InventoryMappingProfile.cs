@@ -13,8 +13,7 @@ namespace InventoryManagementService.Application.Mappers
             CreateMap<InventoryItem, InventoryItemDto>().ReverseMap();
 
             // Map InventoryItem to OutOfStockEvent for messaging
-            CreateMap<InventoryItem, OutOfStockEvent>()
-            .ForMember(dest => dest.ItemId, opt => opt.MapFrom(src => src.Id));
+            CreateMap<InventoryItem, OutOfStockEvent>();
         }
     }
 }

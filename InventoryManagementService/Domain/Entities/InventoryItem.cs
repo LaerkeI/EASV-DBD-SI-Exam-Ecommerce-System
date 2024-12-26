@@ -2,7 +2,7 @@
 {
     public class InventoryItem
     {
-        public string Id { get; set; } //ISBN/SKU/Barcode
+        public string ItemId { get; set; } //Same property as in OrderManagementService and CatalogManagementService. Could be ISBN, SKU or Barcode.
         public int Quantity { get; set; }
     }
 }
