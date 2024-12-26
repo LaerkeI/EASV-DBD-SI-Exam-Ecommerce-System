@@ -9,7 +9,7 @@ namespace CatalogManagementService.Domain.Entities
         public ObjectId BsonId { get; set; }
 
         [BsonElement("ItemId")] 
-        public string ItemId { get; set; } // ISBN/SKU/Barcode
+        public string ItemId { get; set; } // Contains the same value as ItemId in OrderManagementService and InventoryManagementService. Could be ISBN, SKU or barcode.
 
         [BsonElement("Name")]
         public string Name { get; set; }

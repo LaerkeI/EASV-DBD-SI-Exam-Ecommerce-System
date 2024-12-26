@@ -13,11 +13,11 @@ namespace OrderManagementService
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Register the DbContext with Dependency Injection (using SQL Server in this case)
+            // Register the DbContext with Dependency Injection (using SQL Server)
             builder.Services.AddDbContext<OrderContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("MSSQLConnection")));
             
-            // Register AutoMapper and your mapping profiles
+            // Register AutoMapper
             builder.Services.AddAutoMapper(typeof(Program));
             
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();

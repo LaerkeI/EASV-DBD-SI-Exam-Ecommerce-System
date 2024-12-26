@@ -20,9 +20,9 @@ namespace InventoryManagementService.Infrastructure.Messaging
             var factory = new ConnectionFactory()
             {
                 HostName = _hostName,
-                Port = 5672,            // Ensure this matches RabbitMQ's AMQP port
-                UserName = "guest",     // Replace if using non-default credentials
-                Password = "guest"      // Replace if using non-default credentials
+                Port = 5672,            // Matches RabbitMQ's AMQP port
+                UserName = "guest",     
+                Password = "guest"      
             };
 
             using var connection = factory.CreateConnection();

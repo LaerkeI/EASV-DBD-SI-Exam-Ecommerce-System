@@ -2,7 +2,7 @@
 {
     public class OrderLineEvent
     {
-        public string ItemId { get; set; }  //The same value is in OrderManagementService and CatalogManagementService. Could be ISBN, SKU or Barcode.
+        public string ItemId { get; set; }  // Contains the same value as ItemId in OrderManagementService and CatalogManagementService. Could be ISBN, SKU or barcode.
         public int Quantity { get; set; }
     }
 }

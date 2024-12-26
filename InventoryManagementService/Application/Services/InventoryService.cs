@@ -38,14 +38,10 @@ namespace InventoryManagementService.Application.Services
 
             var createdInventoryItem = await _inventoryRepository.AddInventoryItemAsync(inventoryItem);
 
-            //// Publish event after saving
-            //var orderEvent = _mapper.Map<OrderEvent>(createdOrder);
-            //await _orderEventProducer.PublishOrderEventAsync(orderEvent);
-
             return _mapper.Map<InventoryItemDto>(createdInventoryItem);
         }
 
-        public async Task UpdateInventoryItemAsync(InventoryItemDto inventoryItemDto) //For restocking InventoryItem
+        public async Task UpdateInventoryItemAsync(InventoryItemDto inventoryItemDto) // For restocking InventoryItem
         {
             Console.WriteLine($"Updating stock for book = {inventoryItemDto.ItemId}. Stock lowered by {inventoryItemDto.Quantity}");
             var existingInventoryItem = await _inventoryRepository.GetInventoryItemByItemIdAsync(inventoryItemDto.ItemId);
@@ -77,9 +73,9 @@ namespace InventoryManagementService.Application.Services
 
             if (existingInventoryItem.Quantity == 0)
             {
-                // Send message to CatalogManagementService to remove it from display list.
                 Console.WriteLine("Sending message to CatalogManagementService ...");
-                // Publish event after saving
+                
+                // Publish event after saving to remove CatalogItem from Catalog.
                 var outOfStockEvent = _mapper.Map<OutOfStockEvent>(existingInventoryItem);
                 await _outOfStockEventProducer.PublishOutOfStockEventAsync(outOfStockEvent);
             }

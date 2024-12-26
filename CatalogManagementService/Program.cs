@@ -12,14 +12,12 @@ namespace CatalogManagementService
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
             builder.Services.AddSingleton<IMongoClient>(sp =>
             {
                 var configuration = sp.GetRequiredService<IConfiguration>();
                 var mongoConnectionString = configuration.GetConnectionString("MongoDBConnection");
                 return new MongoClient(mongoConnectionString);
             });
-
 
             builder.Services.AddScoped<ICatalogRepository, CatalogRepository>();
             builder.Services.AddScoped<ICatalogService, CatalogService>();

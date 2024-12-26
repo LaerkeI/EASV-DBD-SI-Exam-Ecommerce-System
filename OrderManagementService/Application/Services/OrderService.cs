@@ -45,7 +45,7 @@ namespace OrderManagementService.Application.Services
             return _mapper.Map<OrderDto>(createdOrder);
         }
 
-        public async Task UpdateOrderAsync(OrderDto orderDto) // But would this method even be realistical? It is generally not possible to update an order
+        public async Task UpdateOrderAsync(OrderDto orderDto) // Realistic? It is generally not possible to update an order
         {
             var existingOrder = await _orderRepository.GetOrderByOrderIdAsync(orderDto.OrderId);
             if (existingOrder != null)

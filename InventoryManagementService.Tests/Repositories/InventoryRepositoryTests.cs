@@ -22,8 +22,8 @@ namespace InventoryManagementService.Tests.Repositories
             // Arrange
             using var context = CreateInMemoryContext();
             context.InventoryItems.AddRange(
-                new InventoryItem { Id = "1", Quantity = 10 },
-                new InventoryItem { Id = "2", Quantity = 5 }
+                new InventoryItem { ItemId = "1", Quantity = 10 },
+                new InventoryItem { ItemId = "2", Quantity = 5 }
             );
             await context.SaveChangesAsync();
 
@@ -35,8 +35,8 @@ namespace InventoryManagementService.Tests.Repositories
             // Assert
             Assert.NotNull(items);
             Assert.Equal(2, items.Count());
-            Assert.Contains(items, i => i.Id == "1" && i.Quantity == 10);
-            Assert.Contains(items, i => i.Id == "2" && i.Quantity == 5);
+            Assert.Contains(items, i => i.ItemId == "1" && i.Quantity == 10);
+            Assert.Contains(items, i => i.ItemId == "2" && i.Quantity == 5);
         }
     }
 }

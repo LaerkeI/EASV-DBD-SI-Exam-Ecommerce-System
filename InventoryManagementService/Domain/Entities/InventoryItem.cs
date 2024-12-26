@@ -2,7 +2,7 @@
 {
     public class InventoryItem
     {
-        public string ItemId { get; set; } //Same property as in OrderManagementService and CatalogManagementService. Could be ISBN, SKU or Barcode.
+        public string ItemId { get; set; } // Contains the same value as ItemId in OrderManagementService and CatalogManagementService. Could be ISBN, SKU or barcode.
         public int Quantity { get; set; }
     }
 }

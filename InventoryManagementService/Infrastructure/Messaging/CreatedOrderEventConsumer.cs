@@ -11,7 +11,7 @@ namespace InventoryManagementService.Infrastructure.Messaging
     public class CreatedOrderEventConsumer : BackgroundService
     {
         private readonly string _hostName = "rabbitmq"; // RabbitMQ server host. Service name from docker-compose.yml
-        private readonly string _queueName = "orderQueue"; // Queue name
+        private readonly string _queueName = "createdOrderQueue"; // Queue name
         private readonly IServiceScopeFactory _serviceScopeFactory;
 
         public CreatedOrderEventConsumer(IServiceScopeFactory serviceScopeFactory)

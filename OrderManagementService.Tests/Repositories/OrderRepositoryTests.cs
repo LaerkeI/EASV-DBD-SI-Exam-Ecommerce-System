@@ -24,7 +24,7 @@ namespace OrderManagementService.Tests.Repositories
             context.Orders.AddRange(
                 new Order
                 {
-                    Id = 1,
+                    OrderId = 1,
                     OrderDate = DateTime.Now,
                     OrderLines = new List<OrderLine>
                     {
@@ -33,7 +33,7 @@ namespace OrderManagementService.Tests.Repositories
                 },
                 new Order
                 {
-                    Id = 2,
+                    OrderId = 2,
                     OrderDate = DateTime.Now,
                     OrderLines = new List<OrderLine>
                     {
@@ -51,8 +51,8 @@ namespace OrderManagementService.Tests.Repositories
             // Assert
             Assert.NotNull(orders);
             Assert.Equal(2, orders.Count());
-            Assert.Contains(orders, o => o.Id == 1 && o.OrderLines.Any(ol => ol.ItemId == "I1" && ol.Quantity == 2));
-            Assert.Contains(orders, o => o.Id == 2 && o.OrderLines.Any(ol => ol.ItemId == "I2" && ol.Quantity == 1));
+            Assert.Contains(orders, o => o.OrderId == 1 && o.OrderLines.Any(ol => ol.ItemId == "I1" && ol.Quantity == 2));
+            Assert.Contains(orders, o => o.OrderId == 2 && o.OrderLines.Any(ol => ol.ItemId == "I2" && ol.Quantity == 1));
         }
     }
 }
