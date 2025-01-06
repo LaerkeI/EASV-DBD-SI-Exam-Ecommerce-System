@@ -1,5 +1,9 @@
 # EASV-DBD-SI-Ecommerce-System
 
+## Til DBD-delen
+- Lav transaktioner (Læs async design afsnittet i Art of Scalability i W37 DLS)
+- Optimér database (indexing m.m. - Tjek chatgpts foreslag). Brug Patricks benchmarking tool til at teste. 
+
 ## Common errors
 `An exception has been raised that is likely due to a transient failure. Consider enabling transient error resiliency by adding 'EnableRetryOnFailure' to the 'UseSqlServer' call`
 = The database is not up yet. Give it a moment and try again. That usually solves the problem. 
@@ -68,6 +72,12 @@ Messaging is part of the business logic and is closely tied to the domain (e.g.,
 Pods for a single container. You don't need to create pods directly and should instead use Deployment. 
 Services for load balancing
 Replica Sets for spinning up more instances of the same container (pod?)
+
+
+NodePort in Service:
+Exposes the service externally.
+Binds the service to a port on the Docker Desktop node, allowing access via localhost:<NodePort>.
+Traffic from outside the cluster is not directly load-balanced; it is routed to a node, which then load-balances the traffic across the pods.
 
 **Setup: Kubernetes Dashboard**
 
