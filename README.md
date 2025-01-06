@@ -1,6 +1,6 @@
 # EASV-DBD-SI-Ecommerce-System
 
-test for demo
+test for demo1
 
 ## Til DBD-delen
 - Lav transaktioner (Læs async design afsnittet i Art of Scalability i W37 DLS)
