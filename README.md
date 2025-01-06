@@ -1,5 +1,7 @@
 # EASV-DBD-SI-Ecommerce-System
 
+test for demo
+
 ## Til DBD-delen
 - Lav transaktioner (Læs async design afsnittet i Art of Scalability i W37 DLS)
 - Optimér database (indexing m.m. - Tjek chatgpts foreslag). Brug Patricks benchmarking tool til at teste. 
