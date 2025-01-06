@@ -7,7 +7,7 @@ namespace InventoryManagementService.Infrastructure.Messaging
 {
     public class OutOfStockEventProducer
     {
-        private readonly string _hostName = "rabbitmq";  // RabbitMQ server host (service name in docker-compose.yml)
+        private readonly string _hostName = "rabbitmq";  // RabbitMQ server host (service name in docker-compose.yaml)
         private readonly string _queueName = "outOfStockQueue"; // Queue name for order events
 
         public OutOfStockEventProducer()

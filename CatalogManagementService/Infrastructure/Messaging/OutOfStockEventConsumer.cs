@@ -9,7 +9,7 @@ namespace CatalogManagementService.Infrastructure.Messaging
 {
     public class OutOfStockEventConsumer : BackgroundService
     {
-        private readonly string _hostName = "rabbitmq"; // RabbitMQ server host. Service name from docker-compose.yml
+        private readonly string _hostName = "rabbitmq"; // RabbitMQ server host. Service name from docker-compose.yaml
         private readonly string _queueName = "outOfStockQueue"; // Queue name
         private readonly IServiceScopeFactory _serviceScopeFactory;
 

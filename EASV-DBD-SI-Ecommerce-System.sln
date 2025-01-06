@@ -9,23 +9,25 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventoryManagementService"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{640B027F-7A96-4844-ADD6-F471166336C1}"
 	ProjectSection(SolutionItems) = preProject
-		docker-compose.yml = docker-compose.yml
 		Jenkinsfile = Jenkinsfile
+		docker-compose.yaml = docker-compose.yaml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "k8s", "k8s", "{0A5A6341-E959-48CC-B7F8-CA4464A359F2}"
 	ProjectSection(SolutionItems) = preProject
+		catalog-management-service-deployment.k8s.yaml = catalog-management-service-deployment.k8s.yaml
 		inventory-management-service-deployment.k8s.yaml = inventory-management-service-deployment.k8s.yaml
 		order-management-service-deployment.k8s.yaml = order-management-service-deployment.k8s.yaml
+		rabbitmq-statefulset-conf.k8s.yaml = rabbitmq-statefulset-conf.k8s.yaml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatalogManagementService", "CatalogManagementService\CatalogManagementService.csproj", "{27BB36CD-C592-4DA2-82ED-82D2563D0765}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CatalogManagementService", "CatalogManagementService\CatalogManagementService.csproj", "{27BB36CD-C592-4DA2-82ED-82D2563D0765}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CatalogManagementService.Tests", "CatalogManagementService.Tests\CatalogManagementService.Tests.csproj", "{A488C5FA-6CA6-43D7-9979-56BDC6F57BD3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CatalogManagementService.Tests", "CatalogManagementService.Tests\CatalogManagementService.Tests.csproj", "{A488C5FA-6CA6-43D7-9979-56BDC6F57BD3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderManagementService.Tests", "OrderManagementService.Tests\OrderManagementService.Tests.csproj", "{E87D53E7-0494-4828-BF4C-7A1C3E857047}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderManagementService.Tests", "OrderManagementService.Tests\OrderManagementService.Tests.csproj", "{E87D53E7-0494-4828-BF4C-7A1C3E857047}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InventoryManagementService.Tests", "InventoryManagementService.Tests\InventoryManagementService.Tests.csproj", "{450711C4-F29D-4626-9D75-B846CDDE55A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventoryManagementService.Tests", "InventoryManagementService.Tests\InventoryManagementService.Tests.csproj", "{450711C4-F29D-4626-9D75-B846CDDE55A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

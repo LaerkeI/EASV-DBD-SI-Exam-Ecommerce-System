@@ -39,6 +39,7 @@ namespace OrderManagementService.Application.Services
             var createdOrder = await _orderRepository.AddOrderAsync(order);
 
             // Publish event after saving
+            Console.WriteLine("Sending message to InventoryManagementService ...");
             var orderEvent = _mapper.Map<CreatedOrderEvent>(createdOrder);
             await _orderEventProducer.PublishOrderEventAsync(orderEvent);
 

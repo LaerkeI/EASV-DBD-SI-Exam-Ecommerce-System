@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: order-management-service
+  name: catalog-management-service
   namespace: default
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: order-management-service
+      app: catalog-management-service
   template:
     metadata:
       labels:
-        app: order-management-service
+        app: catalog-management-service
     spec:
       containers:
-        - name: order-management-service
-          image: laerkeimeland/order-management-service:latest
+        - name: catalog-management-service
+          image: laerkeimeland/catalog-management-service:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 80
@@ -28,18 +28,3 @@ spec:
               value: "guest"
             - name: RABBITMQ_PASSWORD
               value: "guest"
-# ---
-# apiVersion: v1
-# kind: Service
-# metadata:
-#   name: order-management-service
-#   namespace: default
-# spec:
-#   selector:
-#     app: order-management-service
-#   ports:
-#     - protocol: TCP
-#       port: 80
-#       targetPort: 80
-#       nodePort: 30080
-#   type: NodePort
