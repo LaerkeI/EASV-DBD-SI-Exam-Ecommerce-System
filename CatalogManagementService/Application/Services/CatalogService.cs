@@ -1,4 +1,6 @@
-﻿using CatalogManagementService.Domain.Entities;
+﻿using AutoMapper;
+using CatalogManagementService.Application.DTOs;
+using CatalogManagementService.Domain.Entities;
 using CatalogManagementService.Infrastructure.Repositories;
 
 namespace CatalogManagementService.Application.Services
@@ -6,35 +8,42 @@ namespace CatalogManagementService.Application.Services
     public class CatalogService : ICatalogService
     {
         private readonly ICatalogRepository _catalogRepository;
+        private readonly IMapper _mapper;
 
-        public CatalogService(ICatalogRepository catalogRepository)
+        public CatalogService(ICatalogRepository catalogRepository, IMapper mapper)
         {
             _catalogRepository = catalogRepository;
+            _mapper = mapper;
         }
 
-        public async Task<List<CatalogItem>> GetCatalogAsync()
+        public async Task<List<CatalogItemDto>> GetCatalogAsync()
         {
-            return await _catalogRepository.GetCatalogAsync();
+            var catalog = await _catalogRepository.GetCatalogAsync();
+            return _mapper.Map<List<CatalogItemDto>>(catalog);
         }
 
-        public async Task<List<CatalogItem>> GetCatalogItemsAsync()
+        public async Task<List<CatalogItemDto>> GetCatalogItemsAsync()
         {
-            return await _catalogRepository.GetCatalogItemsAsync();
+            var catalogItems = await _catalogRepository.GetCatalogItemsAsync();
+            return _mapper.Map<List<CatalogItemDto>>(catalogItems);
         }
 
-        public async Task<CatalogItem?> GetCatalogItemByItemIdAsync(string itemId)
+        public async Task<CatalogItemDto?> GetCatalogItemByItemIdAsync(string itemId)
         {
-            return await _catalogRepository.GetCatalogItemByItemIdAsync(itemId);
+            var catalogItem = await _catalogRepository.GetCatalogItemByItemIdAsync(itemId);
+            return catalogItem == null ? null : _mapper.Map<CatalogItemDto>(catalogItem);
         }
 
-        public async Task CreateCatalogItemAsync(CatalogItem catalogItem)
+        public async Task CreateCatalogItemAsync(CatalogItemDto catalogItemDto)
         {
+            var catalogItem = _mapper.Map<CatalogItem>(catalogItemDto);
             await _catalogRepository.CreateCatalogItemAsync(catalogItem);
         }
 
-        public async Task<bool> UpdateCatalogItemAsync(string itemId, CatalogItem updatedCatalogItem)
+        public async Task<bool> UpdateCatalogItemAsync(string itemId, CatalogItemDto updatedCatalogItemDto)
         {
-            return await _catalogRepository.UpdateCatalogItemAsync(itemId, updatedCatalogItem);
+            var catalogItem = _mapper.Map<CatalogItem>(updatedCatalogItemDto);
+            return await _catalogRepository.UpdateCatalogItemAsync(itemId, catalogItem);
         }
 
         public async Task<bool> UpdateAvailabilityOfCatalogItemAsync(string itemId)

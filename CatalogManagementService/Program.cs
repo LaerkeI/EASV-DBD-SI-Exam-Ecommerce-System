@@ -19,6 +19,9 @@ namespace CatalogManagementService
                 return new MongoClient(mongoConnectionString);
             });
 
+            // Register AutoMapper
+            builder.Services.AddAutoMapper(typeof(Program));
+
             builder.Services.AddScoped<ICatalogRepository, CatalogRepository>();
             builder.Services.AddScoped<ICatalogService, CatalogService>();
             builder.Services.AddHostedService<OutOfStockEventConsumer>();
