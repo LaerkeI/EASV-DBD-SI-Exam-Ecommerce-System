@@ -1,11 +1,14 @@
-﻿using MongoDB.Bson;
+﻿using CatalogManagementService.Domain.Serialization;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using Newtonsoft.Json;
 
 namespace CatalogManagementService.Domain.Entities
 {
     public class CatalogItem
     {
-        [BsonId] // Marks this property as the MongoDB _id field
+        [BsonId] // Marks this property as the MongoDB _id field4
+        [JsonConverter(typeof(ObjectIdJsonConverter))]  // Use custom converter for ObjectId
         public ObjectId BsonId { get; set; }
 
         [BsonElement("ItemId")] 
