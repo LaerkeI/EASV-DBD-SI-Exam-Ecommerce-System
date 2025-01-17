@@ -35,6 +35,13 @@ namespace InventoryManagementService.Infrastructure.Repositories
             if (inventoryItem == null)
                 throw new ArgumentNullException(nameof(inventoryItem));
 
+            // Check if an InventoryItem with the same ItemId already exists
+            var existingItem = await _context.InventoryItems
+                .FirstOrDefaultAsync(i => i.ItemId == inventoryItem.ItemId);
+
+            if (existingItem != null)
+                throw new InvalidOperationException($"Inventory item with ID {inventoryItem.ItemId} already exists.");
+
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
