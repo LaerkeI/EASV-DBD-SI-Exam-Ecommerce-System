@@ -1,10 +1,9 @@
 # EASV-DBD-SI-Ecommerce-System
 
-test for demo1
-
 ## Til DBD-delen
 - Lav transaktioner (Læs async design afsnittet i Art of Scalability i W37 DLS)
 - Optimér database (indexing m.m. - Tjek chatgpts foreslag). Brug Patricks benchmarking tool til at teste. 
+- Læs op på LINQ?
 
 ## Common errors
 `An exception has been raised that is likely due to a transient failure. Consider enabling transient error resiliency by adding 'EnableRetryOnFailure' to the 'UseSqlServer' call`

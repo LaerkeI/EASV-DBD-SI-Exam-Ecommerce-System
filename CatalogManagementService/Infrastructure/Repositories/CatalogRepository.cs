@@ -99,6 +99,17 @@ namespace CatalogManagementService.Infrastructure.Repositories
 
         public async Task CreateCatalogItemAsync(CatalogItem catalogItem)
         {
+            // Check if an item with the same ItemId already exists
+            var existingItem = await _catalogItemsCollection
+                .Find(item => item.ItemId == catalogItem.ItemId)
+                .FirstOrDefaultAsync();
+
+            if (existingItem != null)
+            {
+                throw new InvalidOperationException($"A CatalogItem with ItemId '{catalogItem.ItemId}' already exists.");
+            }
+
+            // Insert the new CatalogItem
             await _catalogItemsCollection.InsertOneAsync(catalogItem);
 
             // Invalidate cache for catalog lists
