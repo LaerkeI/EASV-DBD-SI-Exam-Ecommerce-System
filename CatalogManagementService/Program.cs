@@ -24,7 +24,7 @@ namespace CatalogManagementService
             builder.Services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = builder.Configuration.GetConnectionString("RedisConnection");
-                options.InstanceName = "CatalogRedisCachingServer";
+                options.InstanceName = "CatalogCachingDB";
             });
 
             // Register AutoMapper
