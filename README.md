@@ -1,10 +1,44 @@
 # EASV-DBD-SI-Ecommerce-System
 
-test for demo1
+## Software Quality: 
+### Method: ReduceQuantityForInventoryItemAsync
+```
+1        public async Task ReduceQuantityForInventoryItemAsync(InventoryItemDto inventoryItemDto)
+2        {
+3            Console.WriteLine($"Attempting to update stock for item = {inventoryItemDto.ItemId}. " +
+                $"Stock lowered by {inventoryItemDto.Quantity}");
 
-## Til DBD-delen
-- Lav transaktioner (Læs async design afsnittet i Art of Scalability i W37 DLS)
-- Optimér database (indexing m.m. - Tjek chatgpts foreslag). Brug Patricks benchmarking tool til at teste. 
+4            var existingInventoryItem = await _inventoryRepository.GetInventoryItemByItemIdAsync(inventoryItemDto.ItemId);
+
+5            if (existingInventoryItem == null)
+6            {
+7                throw new Exception($"Inventory item with ItemId {inventoryItemDto.ItemId} not found.");
+8            }
+
+             // Check if the quantity requested is available in stock
+9            if (existingInventoryItem.Quantity < inventoryItemDto.Quantity)
+10           {
+11               throw new InvalidOperationException($"Insufficient stock. Available stock for item {inventoryItemDto.ItemId} " +
+                    $"is {existingInventoryItem.Quantity}. Requested quantity is {inventoryItemDto.Quantity}.");
+12           }
+
+13           existingInventoryItem.Quantity -= inventoryItemDto.Quantity;
+
+14           if (existingInventoryItem.Quantity == 0)
+15           {
+16               Console.WriteLine("Sending message to CatalogManagementService ...");
+                
+                 // Publish event after saving to remove CatalogItem from Catalog.
+17               var outOfStockEvent = _mapper.Map<OutOfStockEvent>(existingInventoryItem);
+18               await _outOfStockEventProducer.PublishOutOfStockEventAsync(outOfStockEvent);
+19           }
+
+20           await _inventoryRepository.UpdateInventoryItemAsync(existingInventoryItem);
+21       }
+```
+#### Program Graph:
+![Diagram](images/program_graph_ReduceQuantityForInventoryItemAsync.jpg)
+
 
 ## Common errors
 `An exception has been raised that is likely due to a transient failure. Consider enabling transient error resiliency by adding 'EnableRetryOnFailure' to the 'UseSqlServer' call`
