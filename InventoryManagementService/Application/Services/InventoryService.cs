@@ -28,8 +28,8 @@ namespace InventoryManagementService.Application.Services
 
         public async Task<InventoryItemDto> GetInventoryItemByItemIdAsync(string itemId)
         {
-            var order = await _inventoryRepository.GetInventoryItemByItemIdAsync(itemId);
-            return _mapper.Map<InventoryItemDto>(order);
+            var inventoryItem = await _inventoryRepository.GetInventoryItemByItemIdAsync(itemId);
+            return _mapper.Map<InventoryItemDto>(inventoryItem);
         }
 
         public async Task<InventoryItemDto> CreateInventoryItemAsync(InventoryItemDto inventoryItemDto)

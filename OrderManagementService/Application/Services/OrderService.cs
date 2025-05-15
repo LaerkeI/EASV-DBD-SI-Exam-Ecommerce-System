@@ -36,6 +36,9 @@ namespace OrderManagementService.Application.Services
         {
             var order = _mapper.Map<Order>(orderDto);
 
+            // Set the creation timestamp
+            order.OrderDate = DateTime.Now;
+
             var createdOrder = await _orderRepository.AddOrderAsync(order);
 
             // Publish event after saving

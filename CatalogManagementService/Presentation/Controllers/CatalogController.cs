@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using CatalogManagementService.Domain.Entities;
 using CatalogManagementService.Application.Services;
+using CatalogManagementService.Application.DTOs;
 
 namespace CatalogManagementService.API.Controllers
 {
@@ -17,7 +17,7 @@ namespace CatalogManagementService.API.Controllers
 
         // GET: api/Catalog/catalog
         [HttpGet("catalog")]
-        public async Task<ActionResult<List<CatalogItem>>> GetCatalog()
+        public async Task<ActionResult<List<CatalogItemDto>>> GetCatalog()
         {
             var catalogItems = await _catalogService.GetCatalogAsync();
             return Ok(catalogItems);
@@ -25,7 +25,7 @@ namespace CatalogManagementService.API.Controllers
 
         // GET: api/Catalog/
         [HttpGet]
-        public async Task<ActionResult<List<CatalogItem>>> GetCatalogItemsAsync()
+        public async Task<ActionResult<List<CatalogItemDto>>> GetCatalogItemsAsync()
         {
             var catalogItems = await _catalogService.GetCatalogItemsAsync();
             return Ok(catalogItems);
@@ -33,39 +33,39 @@ namespace CatalogManagementService.API.Controllers
 
         // GET: api/Catalog/{itemId}
         [HttpGet("{itemId}")]
-        public async Task<ActionResult<CatalogItem>> GetCatalogItemByItemIdAsync(string itemId)
+        public async Task<ActionResult<CatalogItemDto>> GetCatalogItemByItemIdAsync(string itemId)
         {
-            var catalogItem = await _catalogService.GetCatalogItemByItemIdAsync(itemId);
-            if (catalogItem == null)
+            var catalogItemDto = await _catalogService.GetCatalogItemByItemIdAsync(itemId);
+            if (catalogItemDto == null)
             {
                 return NotFound($"Catalog item with ItemId {itemId} not found.");
             }
-            return Ok(catalogItem);
+            return Ok(catalogItemDto);
         }
 
         // POST: api/Catalog
         [HttpPost]
-        public async Task<IActionResult> CreateCatalogItemAsync([FromBody] CatalogItem catalogItem)
+        public async Task<IActionResult> CreateCatalogItemAsync([FromBody] CatalogItemDto catalogItemDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            await _catalogService.CreateCatalogItemAsync(catalogItem);
-            return CreatedAtAction(nameof(GetCatalogItemByItemIdAsync), new { itemId = catalogItem.ItemId }, catalogItem);
+            await _catalogService.CreateCatalogItemAsync(catalogItemDto);
+            return Ok();
         }
 
         // PUT: api/Catalog/{itemId}
         [HttpPut("{itemId}")]
-        public async Task<IActionResult> UpdateCatalogItemAsync(string itemId, [FromBody] CatalogItem updatedCatalogItem)
+        public async Task<IActionResult> UpdateCatalogItemAsync(string itemId, [FromBody] CatalogItemDto updatedCatalogItemDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var success = await _catalogService.UpdateCatalogItemAsync(itemId, updatedCatalogItem);
+            var success = await _catalogService.UpdateCatalogItemAsync(itemId, updatedCatalogItemDto);
             if (!success)
             {
                 return NotFound($"Catalog item with ItemId {itemId} not found.");
