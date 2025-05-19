@@ -5,7 +5,7 @@ using System.Text;
 
 namespace InventoryManagementService.Infrastructure.Messaging
 {
-    public class OutOfStockEventProducer
+    public class OutOfStockEventProducer : IOutOfStockEventProducer
     {
         private readonly string _hostName = "rabbitmq";  // RabbitMQ server host (service name in docker-compose.yaml)
         private readonly string _queueName = "outOfStockQueue"; // Queue name for order events

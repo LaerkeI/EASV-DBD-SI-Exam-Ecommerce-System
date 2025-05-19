@@ -11,9 +11,9 @@ namespace InventoryManagementService.Application.Services
     {
         private readonly IMapper _mapper;
         private readonly IInventoryRepository _inventoryRepository;
-        private readonly OutOfStockEventProducer _outOfStockEventProducer;
+        private readonly IOutOfStockEventProducer _outOfStockEventProducer;
 
-        public InventoryService(IMapper mapper, IInventoryRepository inventoryRepository, OutOfStockEventProducer outOfStockEventProducer)
+        public InventoryService(IMapper mapper, IInventoryRepository inventoryRepository, IOutOfStockEventProducer outOfStockEventProducer)
         {
             _mapper = mapper;
             _inventoryRepository = inventoryRepository;
