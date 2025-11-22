@@ -33,7 +33,9 @@ namespace InventoryManagementService.Tests.Repositories
                 new InventoryItemDto { ItemId = "A1", Quantity = 1 },
                 null, // inventory item not found
                 typeof(Exception),
-                false, false, null
+                false, 
+                false, 
+                null
             };
 
             yield return new object[] {
@@ -41,37 +43,35 @@ namespace InventoryManagementService.Tests.Repositories
                 new InventoryItemDto { ItemId = "B2", Quantity = 10 },
                 new InventoryItem { ItemId = "B2", Quantity = 5 },
                 typeof(InvalidOperationException),
-                false, false, null
+                false, 
+                false, 
+                null
             };
 
             yield return new object[] {
                 "TC3 - Valid update, out of stock event",
-                new InventoryItemDto { ItemId = "D4", Quantity = 10 },
-                new InventoryItem { ItemId = "D4", Quantity = 10 },
+                new InventoryItemDto { ItemId = "C3", Quantity = 10 },
+                new InventoryItem { ItemId = "C3", Quantity = 10 },
                 null,
-                true, true, 0 // expect update and event, final qty = 0
+                true, 
+                true, 
+                0 // expect update and event, final qty = 0
             };
 
             yield return new object[] {
                 "TC4 - Valid update, stock remains",
-                new InventoryItemDto { ItemId = "C3", Quantity = 3 },
-                new InventoryItem { ItemId = "C3", Quantity = 5 },
+                new InventoryItemDto { ItemId = "D4", Quantity = 3 },
+                new InventoryItem { ItemId = "D4", Quantity = 5 },
                 null,
-                true, false, 2 // expect update, no event, final qty = 2
+                true, 
+                false, 
+                2 // expect update, no event, final qty = 2
             };
         }
 
         [Theory]
         [MemberData(nameof(GetTestCases))]
-        public async Task ReduceQuantityForInventoryItemAsync_TestCases(
-            string caseName,
-            InventoryItemDto dto,
-            InventoryItem existingItem,
-            Type expectedException,
-            bool shouldUpdate,
-            bool shouldRaiseEvent,
-            int? expectedFinalQuantity
-        )
+        public async Task ReduceQuantityForInventoryItemAsync_TestCases(string caseName, InventoryItemDto dto, InventoryItem existingItem, Type expectedException, bool shouldUpdate, bool shouldRaiseEvent, int? expectedFinalQuantity)
         {
             // Arrange
             _inventoryRepositoryMock

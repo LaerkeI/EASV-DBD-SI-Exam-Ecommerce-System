@@ -54,7 +54,8 @@ namespace InventoryManagementService.Application.Services
 
         public async Task ReduceQuantityForInventoryItemAsync(InventoryItemDto inventoryItemDto)
         {
-            Console.WriteLine($"Attempting to update stock for item = {inventoryItemDto.ItemId}. Stock lowered by {inventoryItemDto.Quantity}");
+            Console.WriteLine($"Attempting to update stock for item = {inventoryItemDto.ItemId}. " +
+                $"Stock lowered by {inventoryItemDto.Quantity}");
 
             var existingInventoryItem = await _inventoryRepository.GetInventoryItemByItemIdAsync(inventoryItemDto.ItemId);
 
@@ -66,7 +67,8 @@ namespace InventoryManagementService.Application.Services
             // Check if the quantity requested is available in stock
             if (existingInventoryItem.Quantity < inventoryItemDto.Quantity)
             {
-                throw new InvalidOperationException($"Insufficient stock. Available stock for item {inventoryItemDto.ItemId} is {existingInventoryItem.Quantity}. Requested quantity is {inventoryItemDto.Quantity}.");
+                throw new InvalidOperationException($"Insufficient stock. Available stock for item {inventoryItemDto.ItemId}" +
+                    $" is {existingInventoryItem.Quantity}. Requested quantity is {inventoryItemDto.Quantity}.");
             }
 
             existingInventoryItem.Quantity -= inventoryItemDto.Quantity;
